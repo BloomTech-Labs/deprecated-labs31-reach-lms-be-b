@@ -1,0 +1,13 @@
+make models for
+ - Program
+ - Course
+ -
+
+
+USER
+ - role
+ -
+
+COURSE
+ - students
+ - teachers
