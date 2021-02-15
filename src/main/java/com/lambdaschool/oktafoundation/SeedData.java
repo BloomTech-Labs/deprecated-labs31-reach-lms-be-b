@@ -1,9 +1,11 @@
 package com.lambdaschool.oktafoundation;
 
 
+import com.lambdaschool.oktafoundation.models.Course;
 import com.lambdaschool.oktafoundation.models.Role;
 import com.lambdaschool.oktafoundation.models.User;
 import com.lambdaschool.oktafoundation.models.UserRoles;
+import com.lambdaschool.oktafoundation.services.CourseService;
 import com.lambdaschool.oktafoundation.services.RoleService;
 import com.lambdaschool.oktafoundation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +33,16 @@ public class SeedData
 	@Autowired
 	RoleService roleService;
 
+
 	/**
 	 * Connects the user service to this process
 	 */
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	CourseService courseService;
+
 
 	/**
 	 * Generates test, seed data for our application
@@ -64,35 +71,51 @@ public class SeedData
 				.add(new UserRoles(u1, r1));
 		userService.save(u1);
 
+
 		User u2 = new User("barnbarn@maildrop.cc");
 		u2.getRoles()
 				.add(new UserRoles(u2, r2));
 		userService.save(u2);
 
 		// The following is an example user!
-        /*
-        // admin, data, user
-        User u1 = new User("admin",
-            "password",
-            "admin@lambdaschool.local");
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r1));
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r2));
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r3));
-        u1.getUseremails()
-            .add(new Useremail(u1,
-                "admin@email.local"));
-        u1.getUseremails()
-            .add(new Useremail(u1,
-                "admin@mymail.local"));
 
-        userService.save(u1);
-        */
+		Course c1 = new Course();
+		//        c1.setCourseid(6);
+		c1.setCoursename("My New Course");
+		c1.setCoursecode("Course code");
+		c1.setCoursedescription("This is the description of the course I am attempting to create. Please work.");
+
+		courseService.save(c1);
+		Course newCourse = new Course();
+		newCourse = c1;
+		//        courseService.deleteCourseById(c1.getCourseid());
+		newCourse.setCoursedescription("Does my save method work correctly?");
+		courseService.save(newCourse);
+		// The following is an example user!
+
+    /*
+	    // admin, data, user
+	    User u1 = new User("admin",
+	        "password",
+	        "admin@lambdaschool.local");
+	    u1.getRoles()
+	        .add(new UserRoles(u1,
+	            r1));
+	    u1.getRoles()
+	        .add(new UserRoles(u1,
+	            r2));
+	    u1.getRoles()
+	        .add(new UserRoles(u1,
+	            r3));
+	    u1.getUseremails()
+	        .add(new Useremail(u1,
+	            "admin@email.local"));
+	    u1.getUseremails()
+	        .add(new Useremail(u1,
+	            "admin@mymail.local"));
+
+	    userService.save(u1);
+    */
 	}
 
 }
