@@ -1,4 +1,6 @@
 package com.lambdaschool.oktafoundation.models;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,11 @@ public class Course
     private String coursename;
     private String coursecode;
     private String coursedescription;
+
+    @ManyToOne
+    @JoinColumn(name="programId")
+    @JsonIgnoreProperties(value = "courses", allowSetters = true)
+    private Program program;
 
     //relationship to program
 

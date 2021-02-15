@@ -55,6 +55,23 @@ public class User
         allowSetters = true)
     private Set<UserRoles> roles = new HashSet<>();
 
+    @OneToMany(mappedBy ="admin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "admin", allowSetters = true)
+    private Set<Program> adminPrograms = new HashSet<>();
+
+
+
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "user", allowSetters = true)
+    private Set<UserTeachers> studentTeachers = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "user", allowSetters = true)
+    private Set<UserStudents> studentPrograms = new HashSet<>();
+
+
+
+
     /**
      * Default constructor used primarily by the JPA.
      */
@@ -154,6 +171,29 @@ public class User
         this.roles = roles;
     }
 
+    public Set<Program> getAdminPrograms() {
+        return adminPrograms;
+    }
+
+    public void setAdminPrograms(Set<Program> adminPrograms) {
+        this.adminPrograms = adminPrograms;
+    }
+
+    public Set<UserTeachers> getStudentTeachers() {
+        return studentTeachers;
+    }
+
+    public void setStudentTeachers(Set<UserTeachers> studentTeachers) {
+        this.studentTeachers = studentTeachers;
+    }
+
+    public Set<UserStudents> getStudentPrograms() {
+        return studentPrograms;
+    }
+    public void setStudentPrograms(Set<UserStudents> studentPrograms) {
+        this.studentPrograms = studentPrograms;
+    }
+
     /**
      * Internally, user security requires a list of authorities, roles, that the user has. This method is a simple way to provide those.
      * Note that SimpleGrantedAuthority requests the format ROLE_role name all in capital letters!
@@ -175,4 +215,5 @@ public class User
 
         return rtnList;
     }
+
 }

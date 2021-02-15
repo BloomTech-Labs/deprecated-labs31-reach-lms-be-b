@@ -1,9 +1,16 @@
 package com.lambdaschool.oktafoundation.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
+@Table(name = "programs")
 public class Program extends Auditable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,6 +24,25 @@ public class Program extends Auditable{
     private String programType;
 
     private String programDescription;
+
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "program", allowSetters = true)
+    private List<Course> courses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value="program", allowSetters = true)
+    private Set<UserStudents> students = new HashSet<>();
+
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value="program", allowSetters = true)
+    private Set<UserTeachers> teachers = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    @JsonIgnoreProperties(value = "programs", allowSetters = true)
+    private User admin;
+
+
 
     public Program() {
     }
@@ -58,5 +84,35 @@ public class Program extends Auditable{
 
     public void setProgramDescription(String programDescription) {
         this.programDescription = programDescription;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+    public Set<UserStudents> getStudents() {
+        return students;
+    }
+    public void setStudents(Set<UserStudents> students) {
+        this.students = students;
+    }
+
+    public User getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(User admin) {
+        this.admin = admin;
+    }
+
+    public Set<UserTeachers> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Set<UserTeachers> teachers) {
+        this.teachers = teachers;
     }
 }
