@@ -14,16 +14,16 @@ public class Program extends Auditable{
     private String programName;
 
     @NotNull
-    private String getProgramType;
+    private String programType;
 
     private String programDescription;
 
     public Program() {
     }
 
-    public Program(@NotNull String programName, @NotNull String getProgramType, String programDescription) {
+    public Program(@NotNull String programName, @NotNull String programType, String programDescription) {
         this.programName = programName;
-        this.getProgramType = getProgramType;
+        this.programType = programType;
         this.programDescription = programDescription;
     }
 
@@ -39,17 +39,18 @@ public class Program extends Auditable{
         return programName;
     }
 
+    public String getProgramType() {
+        return programType;
+    }
+
+    public void setProgramType(String programType) {
+        this.programType = programType;
+    }
+
     public void setProgramName(String programName) {
         this.programName = programName;
     }
 
-    public String getGetProgramType() {
-        return getProgramType;
-    }
-
-    public void setGetProgramType(String getProgramType) {
-        this.getProgramType = getProgramType;
-    }
 
     public String getProgramDescription() {
         return programDescription;

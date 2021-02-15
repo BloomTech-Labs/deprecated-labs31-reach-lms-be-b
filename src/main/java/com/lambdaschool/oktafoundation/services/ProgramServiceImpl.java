@@ -16,6 +16,9 @@ public class ProgramServiceImpl implements ProgramService {
     @Autowired
     private ProgramRepository programrepos;
 
+    @Autowired
+    private HelperFunctions helperFunctions;
+
     @Override
     public List<Program> findAll() {
         List<Program> list = new ArrayList<>();
@@ -55,7 +58,7 @@ public class ProgramServiceImpl implements ProgramService {
             newProgram.setProgramId(program.getProgramId());
         }
         newProgram.setProgramName(program.getProgramName());
-        newProgram.setGetProgramType(program.getGetProgramType());
+        newProgram.setProgramType(program.getProgramType());
         newProgram.setProgramDescription(program.getProgramDescription());
 
         return programrepos.save(newProgram);
