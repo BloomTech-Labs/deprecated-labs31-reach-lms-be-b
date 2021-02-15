@@ -40,8 +40,6 @@ public class OktaAuthSecurityConfig
 						"/webjars/**"
 				)
 				.permitAll()
-
-				// POST /users/ this might have to be changed to ADMIN if only admins can create users
 				.antMatchers(HttpMethod.POST, "/users/**")
 				.hasAnyRole("ADMIN")
 				.antMatchers(HttpMethod.DELETE, "/users/**")
