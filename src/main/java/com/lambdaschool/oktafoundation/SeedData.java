@@ -1,8 +1,10 @@
 package com.lambdaschool.oktafoundation;
 
+import com.lambdaschool.oktafoundation.models.Course;
 import com.lambdaschool.oktafoundation.models.Role;
 import com.lambdaschool.oktafoundation.models.User;
 import com.lambdaschool.oktafoundation.models.UserRoles;
+import com.lambdaschool.oktafoundation.services.CourseService;
 import com.lambdaschool.oktafoundation.services.RoleService;
 import com.lambdaschool.oktafoundation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class SeedData
     @Autowired
     UserService userService;
 
+    @Autowired
+    CourseService courseService;
+
     /**
      * Generates test, seed data for our application
      * First a set of known data is seeded into our database.
@@ -74,6 +79,18 @@ public class SeedData
                 r2));
         userService.save(u2);
 
+        Course c1 = new Course();
+//        c1.setCourseid(6);
+        c1.setCoursename("My New Course");
+        c1.setCoursecode("Course code");
+        c1.setCoursedescription("This is the description of the course I am attempting to create. Please work.");
+
+        courseService.save(c1);
+        Course newCourse = new Course();
+        newCourse = c1;
+//        courseService.deleteCourseById(c1.getCourseid());
+        newCourse.setCoursedescription("Does my save method work correctly?");
+        courseService.save(newCourse);
         // The following is an example user!
         /*
         // admin, data, user
