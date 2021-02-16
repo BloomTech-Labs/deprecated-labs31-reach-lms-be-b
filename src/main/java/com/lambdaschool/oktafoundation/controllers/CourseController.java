@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping(value = "/courses")
 @RestController
@@ -24,8 +25,13 @@ public class CourseController
         return new ResponseEntity<>(course, HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/courses", produces = "application/json")
-//    public ResponseEntity<?> fetchingProgramCourses()
+    @GetMapping(value = "/courses", produces = "application/json")
+    public ResponseEntity<?> fetchAllCourses()
+    {
+        List<Course> coursesList = courseService.getAllCourses();
+
+        return new ResponseEntity<>(coursesList, HttpStatus.OK);
+    }
 
     @PostMapping(value = "/courses", consumes = "application/json")
     public ResponseEntity<?> postCourse(@RequestBody @Valid Course newCourse)
@@ -41,6 +47,15 @@ public class CourseController
     {
         updatedCourse.setCourseid(courseid);
         courseService.save(updatedCourse);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "/patchcourse/{courseid}", consumes = "application/json")
+    public ResponseEntity<?> patchCourse(@PathVariable long courseid, @RequestBody Course partiallyEditedCourse)
+    {
+        partiallyEditedCourse.setCourseid(courseid);
+        courseService.edit(partiallyEditedCourse);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

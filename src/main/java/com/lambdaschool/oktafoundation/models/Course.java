@@ -20,8 +20,7 @@ public class Course
     @JsonIgnoreProperties(value = "courses", allowSetters = true)
     private Program program;
 
-    //relationship to program
-
+    @OneToMany(mappedBy = "")
 
     public Course()
     {

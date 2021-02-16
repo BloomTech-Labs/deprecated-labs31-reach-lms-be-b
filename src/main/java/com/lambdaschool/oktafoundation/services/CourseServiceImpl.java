@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service(value = "courseService")
 public class CourseServiceImpl implements CourseService
@@ -14,10 +16,10 @@ public class CourseServiceImpl implements CourseService
     CourseRespository courseRespository;
 
     @Override
-    public Course fetchCourseById(long courseid) throws Exception
+    public Course fetchCourseById(long courseid)
     {
         return courseRespository.findById(courseid)
-                .orElseThrow(() -> new Exception("Course " + courseid + " not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("Course " + courseid + " not found!"));
     }
 
     @Override
@@ -47,5 +49,22 @@ public class CourseServiceImpl implements CourseService
     public void deleteCourseById(long courseid)
     {
         courseRespository.deleteById(courseid);
+    }
+
+    @Override
+    public List<Course> getAllCourses()
+    {
+        List<Course> rtnList = new ArrayList<>();
+        courseRespository.findAll().iterator().forEachRemaining(rtnList::add);
+
+        return rtnList;
+    }
+
+    @Override
+    public Course edit(Course partiallyEditedCourse)
+    {
+        Course editedCourse = new Course();
+
+        return editedCourse;
     }
 }

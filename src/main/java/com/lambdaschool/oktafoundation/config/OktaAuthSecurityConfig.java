@@ -38,7 +38,8 @@ public class OktaAuthSecurityConfig
 						"/swagger-ui.html",
 						"/v2/api-docs",
 						"/webjars/**",
-						"/programs/**"
+						"/programs/**",
+						"/courses/**"
 				)
 				.permitAll()
 				.antMatchers(HttpMethod.POST, "/users/**")
