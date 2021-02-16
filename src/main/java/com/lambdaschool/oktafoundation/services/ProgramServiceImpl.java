@@ -1,7 +1,7 @@
 package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.exceptions.ResourceFoundException;
-import com.lambdaschool.oktafoundation.models.Program;
+import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.ProgramRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,12 @@ public class ProgramServiceImpl implements ProgramService {
 
     @Autowired
     private HelperFunctions helperFunctions;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CourseService courseService;
 
     @Override
     public List<Program> findAll() {
@@ -51,22 +57,105 @@ public class ProgramServiceImpl implements ProgramService {
     @Override
     public Program save(Program program) {
         Program newProgram = new Program();
+
         if (program.getProgramId() != 0)
         {
             programrepos.findById(program.getProgramId())
                     .orElseThrow(() -> new ResourceFoundException("Program id " + program.getProgramId() + " not found!"));
             newProgram.setProgramId(program.getProgramId());
         }
+
+        User admin = userService.findUserById(program.getAdmin().getUserid());
+        newProgram.setAdmin(admin);
+
         newProgram.setProgramName(program.getProgramName());
         newProgram.setProgramType(program.getProgramType());
         newProgram.setProgramDescription(program.getProgramDescription());
+
+        newProgram.getTeachers().clear();
+        for (UserTeachers ut : program.getTeachers())
+        {
+            User addTeacher = userService.findUserById(ut.getTeacher().getUserid());
+            newProgram.getTeachers().add(new UserTeachers(addTeacher, newProgram));
+        }
+
+        newProgram.getStudents().clear();
+        for (UserStudents us: program.getStudents())
+        {
+            User addStudent = userService.findUserById(us.getUser().getUserid());
+            newProgram.getStudents().add(new UserStudents(addStudent, newProgram));
+        }
+
+        newProgram.getCourses().clear();
+        for (Course c : program.getCourses())
+        {
+            if(c.getCourseid() > 0)
+            {
+                c = courseService.fetchCourseById(c.getCourseid());
+            } else {
+                c.setCourseid(0);
+                c = courseService.save(c);
+            }
+            newProgram.getCourses().add(c);
+        }
+
 
         return programrepos.save(newProgram);
     }
 
     @Override
     public Program update(Program program, long id) {
-        return null;
+        Program currentProgram = findProgramById(id);
+
+        if(helperFunctions.isAuthorizedToMakeChange(currentProgram.getAdmin().getUsername()))
+        {
+            if (program.getProgramName() != null)
+            {
+                currentProgram.setProgramName(program.getProgramName());
+            }
+            if (program.getProgramType() != null)
+            {
+                currentProgram.setProgramType(program.getProgramType());
+            }
+            if (program.getProgramDescription() != null)
+            {
+                currentProgram.setProgramDescription(program.getProgramDescription());
+            }
+            if(program.getTeachers().size() > 0)
+            {
+                currentProgram.getTeachers().clear();
+                for (UserTeachers ut : program.getTeachers())
+                {
+                    User addTeacher = userService.findUserById(ut.getTeacher().getUserid());
+                    currentProgram.getTeachers().add(new UserTeachers(addTeacher, currentProgram));
+                }
+            }
+            if(program.getStudents().size() > 0){
+                currentProgram.getStudents().clear();
+                for (UserStudents us : program.getStudents())
+                {
+                    User addStudent = userService.findUserById(us.getUser().getUserid());
+                    currentProgram.getStudents().add(new UserStudents(addStudent, currentProgram));
+                }
+            }
+            if(program.getCourses().size() > 0)
+            {
+                currentProgram.getCourses().clear();
+                for(Course c : program.getCourses())
+                {
+                    if(c.getCourseid() > 0)
+                    {
+                        c = courseService.fetchCourseById(c.getCourseid())
+                    } else {
+                        c.setCourseid(0);
+                        c = courseService.save(c);
+                    }
+                    currentProgram.getCourses().add(c);
+                }
+            }
+
+        }
+        return currentProgram;
     }
 
     @Override
