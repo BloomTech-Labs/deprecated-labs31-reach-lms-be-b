@@ -9,20 +9,23 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@RequestMapping(value = "/courses")
 @RestController
 public class CourseController
 {
     @Autowired
     private CourseService courseService;
 
-    //temporary endpoint for testing.
-    @GetMapping(value = "/courses/{courseid}", produces = "application/json")
+    @GetMapping(value = "/course/{courseid}", produces = "application/json")
     public ResponseEntity<?> fetchSingleCourse(@PathVariable long courseid) throws Exception
     {
         Course course = courseService.fetchCourseById(courseid);
 
         return new ResponseEntity<>(course, HttpStatus.OK);
     }
+
+//    @GetMapping(value = "/courses", produces = "application/json")
+//    public ResponseEntity<?> fetchingProgramCourses()
 
     @PostMapping(value = "/courses", consumes = "application/json")
     public ResponseEntity<?> postCourse(@RequestBody @Valid Course newCourse)
@@ -33,7 +36,7 @@ public class CourseController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value = "/courses/{courseid}", consumes = "application/json")
+    @PutMapping(value = "/course/{courseid}", consumes = "application/json")
     public ResponseEntity<?> putCourse(@PathVariable long courseid, @RequestBody @Valid Course updatedCourse)
     {
         updatedCourse.setCourseid(courseid);
@@ -42,7 +45,7 @@ public class CourseController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/courses/{courseid}")
+    @DeleteMapping(value = "/course/{courseid}")
     public ResponseEntity<?> deleteSingleCourse(@PathVariable long courseid)
     {
         courseService.deleteCourseById(courseid);
