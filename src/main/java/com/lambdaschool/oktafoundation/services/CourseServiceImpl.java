@@ -1,5 +1,6 @@
 package com.lambdaschool.oktafoundation.services;
 
+import com.lambdaschool.oktafoundation.exceptions.ResourceFoundException;
 import com.lambdaschool.oktafoundation.models.Course;
 import com.lambdaschool.oktafoundation.repository.CourseRespository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,10 @@ public class CourseServiceImpl implements CourseService
     CourseRespository courseRespository;
 
     @Override
-    public Course fetchCourseById(long courseid) throws Exception
+    public Course fetchCourseById(long courseid) throws ResourceFoundException
     {
         return courseRespository.findById(courseid)
-                .orElseThrow(() -> new Exception("Course " + courseid + " not found!"));
+                .orElseThrow(() -> new ResourceFoundException("Course " + courseid + " not found!"));
     }
 
     @Override
