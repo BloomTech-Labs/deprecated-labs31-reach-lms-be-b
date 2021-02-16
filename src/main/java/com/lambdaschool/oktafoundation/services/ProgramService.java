@@ -9,7 +9,7 @@ public interface ProgramService {
     Program findProgramById(long id);
     Program findByName(String name);
     void delete(long id);
-    Program save(Program program);
-    Program update(Program program, long id);
+    Program save(Program program) throws Exception;
+    Program update(Program program, long id) throws Exception;
     void deleteAll();
 }

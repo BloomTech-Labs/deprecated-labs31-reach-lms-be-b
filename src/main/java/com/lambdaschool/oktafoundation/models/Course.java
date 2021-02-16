@@ -2,6 +2,8 @@ package com.lambdaschool.oktafoundation.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "courses")
@@ -21,7 +23,9 @@ public class Course
     @JsonIgnoreProperties(value = "courses", allowSetters = true)
     private Program program;
 
-    @OneToMany(mappedBy = "")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "course")
+    Set<Module> modules = new HashSet<>();
 
     public Course()
     {
@@ -82,5 +86,15 @@ public class Course
     public void setProgram(Program program)
     {
         this.program = program;
+    }
+
+    public Set<Module> getModules()
+    {
+        return modules;
+    }
+
+    public void setModules(Set<Module> modules)
+    {
+        this.modules = modules;
     }
 }

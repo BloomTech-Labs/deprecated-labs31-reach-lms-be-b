@@ -8,7 +8,7 @@ public interface CourseService
 {
     Course fetchCourseById(long courseid);
 
-    Course save(Course course);
+    Course save(Course course) throws Exception;
 
     void deleteCourseById(long courseid);
 

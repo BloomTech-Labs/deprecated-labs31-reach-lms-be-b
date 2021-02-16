@@ -13,7 +13,7 @@ public class ModuleServiceImpl implements ModuleService{
     ModuleRepository moduleRepository;
 
     @Override
-    public Module fetchModuleById(long moduleid) throws Exception {
+    public Module fetchModuleById(long moduleid) throws EntityNotFoundException {
         return moduleRepository.findById(moduleid)
                 .orElseThrow(() -> new EntityNotFoundException("Module " + moduleid + " not found!"));
     }

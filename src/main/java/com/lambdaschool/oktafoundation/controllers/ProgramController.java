@@ -39,7 +39,8 @@ public class ProgramController {
     }
 
     @PostMapping(value = "/program", consumes = "application/json")
-    public ResponseEntity<?> addNewProgram(@Valid @RequestBody Program newProgram){
+    public ResponseEntity<?> addNewProgram(@Valid @RequestBody Program newProgram) throws Exception
+    {
         newProgram.setProgramId(0);
         newProgram = programServices.save(newProgram);
 
@@ -55,14 +56,15 @@ public class ProgramController {
 
     @PutMapping(value = "/program/{programid}", consumes = "application/json")
     public ResponseEntity<?> updateFullProgram(@Valid @RequestBody Program updateProgram,
-                                               @PathVariable long programid){
+                                               @PathVariable long programid) throws Exception
+    {
         updateProgram.setProgramId(programid);
         programServices.save(updateProgram);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping(value = "program/{programid}", consumes = "application/json")
-    public ResponseEntity<?> updateProgram(@RequestBody Program updateProgram, @PathVariable long programid)
+    public ResponseEntity<?> updateProgram(@RequestBody Program updateProgram, @PathVariable long programid) throws Exception
     {
         programServices.update(updateProgram, programid);
         return new ResponseEntity<>(HttpStatus.OK);

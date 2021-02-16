@@ -2,6 +2,7 @@ package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.exceptions.ResourceFoundException;
 import com.lambdaschool.oktafoundation.models.Course;
+import com.lambdaschool.oktafoundation.models.Module;
 import com.lambdaschool.oktafoundation.repository.CourseRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class CourseServiceImpl implements CourseService
     @Autowired
     CourseRespository courseRespository;
 
+    @Autowired
+    ModuleService moduleService;
+
     @Override
     public Course fetchCourseById(long courseid) throws ResourceFoundException
     {
@@ -24,7 +28,7 @@ public class CourseServiceImpl implements CourseService
     }
 
     @Override
-    public Course save(Course course)
+    public Course save(Course course) throws Exception
     {
         Course newCourse = new Course();
 
@@ -39,11 +43,20 @@ public class CourseServiceImpl implements CourseService
         newCourse.setCoursecode(course.getCoursecode());
         newCourse.setCoursedescription(course.getCoursedescription());
 
-        //handling of future relationships right here
-
-
-
-        return courseRespository.save(course);
+        for (Module m : course.getModules())
+        {
+            if (m.getModuleId() > 0)
+            {
+                moduleService.fetchModuleById(m.getModuleId());
+            }
+            else
+            {
+                m.setModuleId(0);
+                moduleService.save(m);
+            }
+            newCourse.getModules().add(m);
+        }
+        return courseRespository.save(newCourse);
     }
 
     @Override
@@ -65,6 +78,8 @@ public class CourseServiceImpl implements CourseService
     public Course edit(Course partiallyEditedCourse)
     {
         Course editedCourse = new Course();
+
+
 
         return editedCourse;
     }

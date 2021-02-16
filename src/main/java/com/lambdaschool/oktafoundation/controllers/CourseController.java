@@ -34,7 +34,7 @@ public class CourseController
     }
 
     @PostMapping(value = "/courses", consumes = "application/json")
-    public ResponseEntity<?> postCourse(@RequestBody @Valid Course newCourse)
+    public ResponseEntity<?> postCourse(@RequestBody @Valid Course newCourse) throws Exception
     {
         newCourse.setCourseid(0);
         courseService.save(newCourse);
@@ -43,7 +43,7 @@ public class CourseController
     }
 
     @PutMapping(value = "/course/{courseid}", consumes = "application/json")
-    public ResponseEntity<?> putCourse(@PathVariable long courseid, @RequestBody @Valid Course updatedCourse)
+    public ResponseEntity<?> putCourse(@PathVariable long courseid, @RequestBody @Valid Course updatedCourse) throws Exception
     {
         updatedCourse.setCourseid(courseid);
         courseService.save(updatedCourse);
