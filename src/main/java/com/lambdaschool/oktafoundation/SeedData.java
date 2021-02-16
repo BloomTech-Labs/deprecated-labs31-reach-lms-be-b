@@ -1,13 +1,8 @@
 package com.lambdaschool.oktafoundation;
 
 
-import com.lambdaschool.oktafoundation.models.Course;
-import com.lambdaschool.oktafoundation.models.Role;
-import com.lambdaschool.oktafoundation.models.User;
-import com.lambdaschool.oktafoundation.models.UserRoles;
-import com.lambdaschool.oktafoundation.services.CourseService;
-import com.lambdaschool.oktafoundation.services.RoleService;
-import com.lambdaschool.oktafoundation.services.UserService;
+import com.lambdaschool.oktafoundation.models.*;
+import com.lambdaschool.oktafoundation.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -40,9 +35,21 @@ public class SeedData
 	@Autowired
 	UserService userService;
 
+	//Connects User Teachers service to this process
+	@Autowired
+	UserTeachersService userTeachersService;
+
+	//Connects User Students service to this process
+	@Autowired
+	UserStudentsService userStudentsService;
+
+	//Connects Program service to this process
+	@Autowired
+	ProgramService programService;
+
+	//Connects Course service to this process
 	@Autowired
 	CourseService courseService;
-
 
 	/**
 	 * Generates test, seed data for our application
@@ -69,28 +76,47 @@ public class SeedData
 		User u1 = new User("llama001@maildrop.cc");
 		u1.getRoles()
 				.add(new UserRoles(u1, r1));
-		userService.save(u1);
+		u1 = userService.save(u1);
 
 
 		User u2 = new User("barnbarn@maildrop.cc");
 		u2.getRoles()
 				.add(new UserRoles(u2, r2));
-		userService.save(u2);
+		u2 = userService.save(u2);
+
+		User u3 = new User("student@reachlms.cc");
+		u3.getRoles()
+				.add(new UserRoles(u3, r3));
+		u3 = userService.save(u3);
 
 		// The following is an example user!
 
+		Program p1 = new Program();
+		p1.setProgramName("Python Basics");
+		p1.setProgramDescription("This is a introduction to the basics of Python. Get ready to bang your head against the desk");
+		p1.setProgramType("Introductory");
+		p1.setAdmin(u1);
+		p1 = programService.save(p1);
+		
 		Course c1 = new Course();
-		//        c1.setCourseid(6);
 		c1.setCoursename("My New Course");
 		c1.setCoursecode("Course code");
 		c1.setCoursedescription("This is the description of the course I am attempting to create. Please work.");
+		c1.setProgram(p1);
 
+		p1.getCourses().add(c1);
 		courseService.save(c1);
-		Course newCourse = new Course();
-		newCourse = c1;
-		//        courseService.deleteCourseById(c1.getCourseid());
-		newCourse.setCoursedescription("Does my save method work correctly?");
-		courseService.save(newCourse);
+		userTeachersService.save(u2.getUserid(), p1.getProgramId());
+		userStudentsService.save(u3.getUserid(), p1.getProgramId());
+		
+		
+//		TESTING COURSE ENDPOINTS
+//		courseService.save(c1);
+//		Course newCourse = new Course();
+//		newCourse = c1;
+//		//        courseService.deleteCourseById(c1.getCourseid());
+//		newCourse.setCoursedescription("Does my save method work correctly?");
+//		courseService.save(newCourse);
 		// The following is an example user!
 
     /*

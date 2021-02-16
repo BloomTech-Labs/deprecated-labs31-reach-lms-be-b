@@ -7,6 +7,13 @@ public class UserStudentsId
     private long user;
     private long program;
     public UserStudentsId() {}
+
+    public UserStudentsId(long user, long program)
+    {
+        this.user = user;
+        this.program = program;
+    }
+
     public long getUser() {
         return user;
     }
