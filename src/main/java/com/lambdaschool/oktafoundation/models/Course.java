@@ -74,4 +74,14 @@ public class Course
     {
         this.coursedescription = coursedescription;
     }
+
+    public Program getProgram()
+    {
+        return program;
+    }
+
+    public void setProgram(Program program)
+    {
+        this.program = program;
+    }
 }
