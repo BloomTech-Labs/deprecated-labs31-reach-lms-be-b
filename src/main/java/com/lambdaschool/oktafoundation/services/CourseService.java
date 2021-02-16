@@ -4,7 +4,7 @@ import com.lambdaschool.oktafoundation.models.Course;
 
 public interface CourseService
 {
-    Course fetchCourseById(long courseid) throws Exception;
+    Course fetchCourseById(long courseid);
 
     Course save(Course course);
 

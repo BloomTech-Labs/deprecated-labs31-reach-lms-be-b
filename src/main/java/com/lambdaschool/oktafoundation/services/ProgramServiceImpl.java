@@ -145,7 +145,7 @@ public class ProgramServiceImpl implements ProgramService {
                 {
                     if(c.getCourseid() > 0)
                     {
-                        c = courseService.fetchCourseById(c.getCourseid())
+                        c = courseService.fetchCourseById(c.getCourseid());
                     } else {
                         c.setCourseid(0);
                         c = courseService.save(c);
