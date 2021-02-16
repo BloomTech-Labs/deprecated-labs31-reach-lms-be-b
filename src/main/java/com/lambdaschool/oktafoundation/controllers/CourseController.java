@@ -52,7 +52,7 @@ public class CourseController
     }
 
     @PatchMapping(value = "/patchcourse/{courseid}", consumes = "application/json")
-    public ResponseEntity<?> patchCourse(@PathVariable long courseid, @RequestBody Course partiallyEditedCourse)
+    public ResponseEntity<?> patchCourse(@PathVariable long courseid, @RequestBody Course partiallyEditedCourse) throws Exception
     {
         partiallyEditedCourse.setCourseid(courseid);
         courseService.edit(partiallyEditedCourse);

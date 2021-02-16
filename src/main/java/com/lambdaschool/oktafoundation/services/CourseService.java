@@ -14,5 +14,5 @@ public interface CourseService
 
     List<Course> getAllCourses();
 
-    Course edit(Course partiallyEditedCourse);
+    Course edit(Course partiallyEditedCourse) throws Exception;
 }

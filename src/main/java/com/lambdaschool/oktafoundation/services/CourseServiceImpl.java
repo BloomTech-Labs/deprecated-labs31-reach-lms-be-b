@@ -75,12 +75,46 @@ public class CourseServiceImpl implements CourseService
     }
 
     @Override
-    public Course edit(Course partiallyEditedCourse)
+    public Course edit(Course partiallyEditedCourse) throws Exception
     {
-        Course editedCourse = new Course();
+        Course currentCourse = courseRespository.findById(partiallyEditedCourse.getCourseid())
+                .orElseThrow(() -> new EntityNotFoundException("Course with id " + partiallyEditedCourse.getCourseid() + " not found!"));
+
+        if (partiallyEditedCourse.getCoursename() != null)
+        {
+            currentCourse.setCoursename(partiallyEditedCourse.getCoursename());
+        }
+
+        if (partiallyEditedCourse.getCoursecode() != null)
+        {
+            currentCourse.setCoursecode(partiallyEditedCourse.getCoursecode());
+        }
+
+        if (partiallyEditedCourse.getCoursedescription() != null)
+        {
+            currentCourse.setCoursedescription(partiallyEditedCourse.getCoursedescription());
+        }
+
+        //may want to change this if we don't want the program to be edited through course
+        if (partiallyEditedCourse.getProgram() != null)
+        {
+            currentCourse.setProgram(partiallyEditedCourse.getProgram());
+        }
+
+        //may want to change this depending on what we want to do. I am thinking that we wouldn't want to do a patch to courses
+        // to add a module, instead I think we do that through module endpoint.
+        if (partiallyEditedCourse.getModules().size() > 0)
+        {
+            currentCourse.getModules().clear();
+            for (Module m : partiallyEditedCourse.getModules())
+            {
+                Module module = moduleService.fetchModuleById(m.getModuleId());
+
+                currentCourse.getModules().add(module);
+            }
+        }
 
 
-
-        return editedCourse;
+        return courseRespository.save(currentCourse);
     }
 }
