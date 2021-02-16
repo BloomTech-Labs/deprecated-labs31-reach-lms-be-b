@@ -62,11 +62,11 @@ public class User
 
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = "user", allowSetters = true)
+    @JsonIgnoreProperties(value = {"teacher"}, allowSetters = true)
     private Set<UserTeachers> studentTeachers = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = "user", allowSetters = true)
+    @JsonIgnoreProperties(value = "students", allowSetters = true)
     private Set<UserStudents> studentPrograms = new HashSet<>();
 
 

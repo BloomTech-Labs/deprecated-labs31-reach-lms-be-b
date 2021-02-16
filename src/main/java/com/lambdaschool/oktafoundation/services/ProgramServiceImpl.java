@@ -55,7 +55,8 @@ public class ProgramServiceImpl implements ProgramService {
     }
 
     @Override
-    public Program save(Program program) {
+    public Program save(Program program) throws Exception
+    {
         Program newProgram = new Program();
 
         if (program.getProgramId() != 0)
@@ -104,7 +105,8 @@ public class ProgramServiceImpl implements ProgramService {
     }
 
     @Override
-    public Program update(Program program, long id) {
+    public Program update(Program program, long id) throws Exception
+    {
         Program currentProgram = findProgramById(id);
 
         if(helperFunctions.isAuthorizedToMakeChange(currentProgram.getAdmin().getUsername()))

@@ -8,15 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
+@RequestMapping(value = "/courses")
 @RestController
 public class CourseController
 {
     @Autowired
     private CourseService courseService;
 
-    //temporary endpoint for testing.
-    @GetMapping(value = "/courses/{courseid}", produces = "application/json")
+    @GetMapping(value = "/course/{courseid}", produces = "application/json")
     public ResponseEntity<?> fetchSingleCourse(@PathVariable long courseid) throws Exception
     {
         Course course = courseService.fetchCourseById(courseid);
@@ -24,8 +25,16 @@ public class CourseController
         return new ResponseEntity<>(course, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/courses", produces = "application/json")
+    public ResponseEntity<?> fetchAllCourses()
+    {
+        List<Course> coursesList = courseService.getAllCourses();
+
+        return new ResponseEntity<>(coursesList, HttpStatus.OK);
+    }
+
     @PostMapping(value = "/courses", consumes = "application/json")
-    public ResponseEntity<?> postCourse(@RequestBody @Valid Course newCourse)
+    public ResponseEntity<?> postCourse(@RequestBody @Valid Course newCourse) throws Exception
     {
         newCourse.setCourseid(0);
         courseService.save(newCourse);
@@ -33,8 +42,8 @@ public class CourseController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value = "/courses/{courseid}", consumes = "application/json")
-    public ResponseEntity<?> putCourse(@PathVariable long courseid, @RequestBody @Valid Course updatedCourse)
+    @PutMapping(value = "/course/{courseid}", consumes = "application/json")
+    public ResponseEntity<?> putCourse(@PathVariable long courseid, @RequestBody @Valid Course updatedCourse) throws Exception
     {
         updatedCourse.setCourseid(courseid);
         courseService.save(updatedCourse);
@@ -42,7 +51,16 @@ public class CourseController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/courses/{courseid}")
+    @PatchMapping(value = "/patchcourse/{courseid}", consumes = "application/json")
+    public ResponseEntity<?> patchCourse(@PathVariable long courseid, @RequestBody Course partiallyEditedCourse) throws Exception
+    {
+        partiallyEditedCourse.setCourseid(courseid);
+        courseService.edit(partiallyEditedCourse);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/course/{courseid}")
     public ResponseEntity<?> deleteSingleCourse(@PathVariable long courseid)
     {
         courseService.deleteCourseById(courseid);

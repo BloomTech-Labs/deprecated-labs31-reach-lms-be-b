@@ -69,4 +69,13 @@ public class Module extends Auditable {
         this.modulecontent = modulecontent;
     }
 
+    public Course getCourse()
+    {
+        return course;
+    }
+
+    public void setCourse(Course course)
+    {
+        this.course = course;
+    }
 }
