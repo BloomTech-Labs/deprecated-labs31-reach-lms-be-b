@@ -37,9 +37,7 @@ public class OktaAuthSecurityConfig
 						"/swagger-resource/**",
 						"/swagger-ui.html",
 						"/v2/api-docs",
-						"/webjars/**",
-						"/programs/**",
-						"/courses/**"
+						"/webjars/**"
 				)
 				.permitAll()
 				.antMatchers(HttpMethod.POST, "/users/**")
@@ -47,6 +45,8 @@ public class OktaAuthSecurityConfig
 				.antMatchers(HttpMethod.DELETE, "/users/**")
 				.hasAnyRole("ADMIN")
 				.antMatchers(HttpMethod.PUT, "/users/**")
+				.hasAnyRole("ADMIN")
+				.antMatchers("/programs/**")
 				.hasAnyRole("ADMIN")
 
 				// *** NOTE AUTHENTICATED CAN READ USERS!!! PATCHES are handled in UserService
