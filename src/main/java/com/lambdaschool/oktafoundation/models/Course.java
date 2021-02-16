@@ -17,6 +17,7 @@ public class Course
 
     @ManyToOne
     @JoinColumn(name="programId")
+//    this needs to not be camel case otherwise Spring gets confused
     @JsonIgnoreProperties(value = "courses", allowSetters = true)
     private Program program;
 
