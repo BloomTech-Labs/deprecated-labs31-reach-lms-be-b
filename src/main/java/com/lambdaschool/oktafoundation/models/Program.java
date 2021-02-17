@@ -30,7 +30,7 @@ public class Program extends Auditable{
     private List<Course> courses = new ArrayList<>();
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value={"program", "studentPrograms"}, allowSetters = true)
+    @JsonIgnoreProperties(value="program", allowSetters = true)
     private Set<UserStudents> students = new HashSet<>();
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -39,7 +39,7 @@ public class Program extends Auditable{
 
     @ManyToOne
     @JoinColumn(name = "userid")
-    @JsonIgnoreProperties(value = "programs", allowSetters = true)
+    @JsonIgnoreProperties(value = {"adminPrograms", "studentPrograms", "teacherPrograms"}, allowSetters = true)
     private User admin;
 
 

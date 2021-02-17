@@ -37,10 +37,11 @@ public class OktaAuthSecurityConfig
 						"/swagger-resource/**",
 						"/swagger-ui.html",
 						"/v2/api-docs",
-						"/webjars/**",
-						"/courses/**"
+						"/webjars/**"
 				)
 				.permitAll()
+				.antMatchers("/programs/**")
+				.hasAnyRole("ADMIN")
 				.antMatchers(HttpMethod.POST, "/users/**")
 				.hasAnyRole("ADMIN")
 				.antMatchers(HttpMethod.DELETE, "/users/**")
