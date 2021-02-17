@@ -62,12 +62,15 @@ public class User
     private Set<UserRoles> roles = new HashSet<>();
 
     @OneToMany(mappedBy ="admin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "admin", allowSetters = true)
     private Set<Program> adminPrograms = new HashSet<>();
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "teacher", allowSetters = true)
     private Set<UserTeachers> teacherPrograms = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "user", allowSetters = true)
     private Set<UserStudents> studentPrograms = new HashSet<>();
 
 
