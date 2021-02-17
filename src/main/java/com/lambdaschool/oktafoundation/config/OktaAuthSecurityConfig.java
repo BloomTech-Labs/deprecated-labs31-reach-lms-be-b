@@ -50,6 +50,30 @@ public class OktaAuthSecurityConfig
 				.antMatchers("/programs/**")
 				.hasAnyRole("ADMIN")
 
+				// Start of courses
+				.antMatchers(HttpMethod.POST, "/courses/**")
+				.hasAnyRole("ADMIN", "USER")
+				.antMatchers(HttpMethod.PUT, "/courses/**")
+				.hasAnyRole("ADMIN", "USER")
+				.antMatchers(HttpMethod.DELETE, "/courses/**")
+				.hasAnyRole("ADMIN", "USER")
+				.antMatchers(HttpMethod.PATCH, "/courses/**")
+				.hasAnyRole("ADMIN", "USER")
+				.antMatchers(HttpMethod.GET, "/courses/**")
+				.hasAnyRole("ADMIN", "USER", "DATA")
+
+				// Start of modules
+				.antMatchers(HttpMethod.POST, "/modules/**")
+				.hasAnyRole("ADMIN", "USER")
+				.antMatchers(HttpMethod.PUT, "/modules/**")
+				.hasAnyRole("ADMIN", "USER")
+				.antMatchers(HttpMethod.PATCH, "/modules/**")
+				.hasAnyRole("ADMIN", "USER")
+				.antMatchers(HttpMethod.DELETE, "/modules/**")
+				.hasAnyRole("ADMIN", "USER")
+				.antMatchers(HttpMethod.GET, "/modules/**")
+				.hasAnyRole("ADMIN", "USER", "DATA")
+
 				// *** NOTE AUTHENTICATED CAN READ USERS!!! PATCHES are handled in UserService
 				.antMatchers("/users/**")
 				.authenticated()

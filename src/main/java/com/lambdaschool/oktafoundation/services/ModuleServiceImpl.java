@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service(value = "moduleService")
 public class ModuleServiceImpl implements ModuleService{
@@ -72,5 +74,14 @@ public class ModuleServiceImpl implements ModuleService{
         }
 
         return moduleRepository.save(newModule);
+    }
+
+    @Override
+    public List<Module> fetchAllModules()
+    {
+        List<Module> rtnList = new ArrayList<>();
+        moduleRepository.findAll().iterator().forEachRemaining(rtnList::add);
+
+        return rtnList;
     }
 }
