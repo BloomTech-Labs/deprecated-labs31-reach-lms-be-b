@@ -25,7 +25,7 @@ public class Module extends Auditable {
 
     @ManyToOne
     @JoinColumn(name = "courseid")
-    @JsonIgnoreProperties(value = {"program"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"program", "modules"}, allowSetters = true)
     public Course course;
 
     public Module() {
@@ -37,35 +37,35 @@ public class Module extends Auditable {
         this.modulecontent = modulecontent;
     }
 
-    public long getModuleId() {
+    public long getModuleid() {
         return moduleid;
     }
 
-    public void setModuleId(long moduleid) {
+    public void setModuleid(long moduleid) {
         this.moduleid = moduleid;
     }
 
-    public String getModuleName() {
+    public String getModulename() {
         return modulename;
     }
 
-    public void setModuleName(String modulename) {
+    public void setModulename(String modulename) {
         this.modulename = modulename;
     }
 
-    public String getModuleDescription() {
+    public String getModuledescription() {
         return moduledescription;
     }
 
-    public void setModuleDescription(String moduledescription) {
+    public void setModuledescription(String moduledescription) {
         this.moduledescription = moduledescription;
     }
 
-    public String getModuleContent() {
+    public String getModulecontent() {
         return modulecontent;
     }
 
-    public void setModuleContent(String modulecontent) {
+    public void setModulecontent(String modulecontent) {
         this.modulecontent = modulecontent;
     }
 

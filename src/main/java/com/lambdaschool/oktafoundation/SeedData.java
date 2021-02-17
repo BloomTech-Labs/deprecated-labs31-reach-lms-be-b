@@ -113,16 +113,16 @@ public class SeedData
 		p1.getCourses().add(c1);
 
 		Module m1 = new Module();
-		m1.setModuleName("Syntax");
-		m1.setModuleContent("This is the content for this module. Python functions start with def didn't you know?");
-		m1.setModuleDescription("This is a more in depth description about how Pythons functions start with def. How many licks does it take to get to the center of a tootsie pop? The world may never know.");
+		m1.setModulename("Syntax");
+		m1.setModulecontent("This is the content for this module. Python functions start with def didn't you know?");
+		m1.setModuledescription("This is a more in depth description about how Pythons functions start with def. How many licks does it take to get to the center of a tootsie pop? The world may never know.");
 		m1.setCourse(c1);
 		moduleService.save(m1);
 
 		Module m2 = new Module();
-		m2.setModuleName("Syntax");
-		m2.setModuleContent("This is the content for this module. Python functions start with def didn't you know?");
-		m2.setModuleDescription("This is a more in depth description about how Pythons functions start with def. How many licks does it take to get to the center of a tootsie pop? The world may never know.");
+		m2.setModulename("Syntax");
+		m2.setModulecontent("This is the content for this module. Python functions start with def didn't you know?");
+		m2.setModuledescription("This is a more in depth description about how Pythons functions start with def. How many licks does it take to get to the center of a tootsie pop? The world may never know.");
 		m2.setCourse(c1);
 		moduleService.save(m2);
 
