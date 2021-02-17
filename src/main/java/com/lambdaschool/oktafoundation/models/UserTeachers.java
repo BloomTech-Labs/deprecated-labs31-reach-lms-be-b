@@ -10,7 +10,7 @@ public class UserTeachers extends Auditable implements Serializable
     @Id
     @ManyToOne
     @JoinColumn(name = "userid")
-    @JsonIgnoreProperties(value = "program", allowSetters = true)
+    @JsonIgnoreProperties(value = {"adminPrograms", "studentPrograms", "teacherPrograms"}, allowSetters = true)
     private User teacher;
     @Id
     @ManyToOne

@@ -32,7 +32,7 @@ public class ProgramController {
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/program/{programName}", produces = "application/json")
+    @GetMapping(value = "/program/name/{programName}", produces = "application/json")
     public ResponseEntity<?> getProgramByName(@PathVariable String programName){
         Program p = programServices.findByName(programName);
         return new ResponseEntity<>(p, HttpStatus.OK);
