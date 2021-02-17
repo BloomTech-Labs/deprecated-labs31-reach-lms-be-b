@@ -33,6 +33,12 @@ public class User
     @Column(unique = true)
     private String username;
 
+    private String firstName;
+
+    private String lastName;
+
+    private String phone;
+
     /**
      * A list of emails for this user
      */
@@ -74,6 +80,13 @@ public class User
     {
     }
 
+    public User(@NotNull String username, String firstName, String lastName, String phone) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+    }
+
     /**
      * Given the params, create a new user object
      * <p>
@@ -81,9 +94,9 @@ public class User
      *
      * @param username The username (String) of the user
      */
-    public User(String username)
-    {
-        setUsername(username);
+
+    public User(@NotNull String username) {
+        this.username = username;
     }
 
     /**
@@ -187,6 +200,30 @@ public class User
     }
     public void setStudentPrograms(Set<UserStudents> studentPrograms) {
         this.studentPrograms = studentPrograms;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     /**

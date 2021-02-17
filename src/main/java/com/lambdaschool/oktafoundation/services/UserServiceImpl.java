@@ -101,6 +101,10 @@ public class UserServiceImpl
         newUser.setUsername(user.getUsername()
             .toLowerCase());
 
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.setPhone(user.getPhone());
+
         newUser.getRoles()
             .clear();
         for (UserRoles ur : user.getRoles())
@@ -140,6 +144,18 @@ public class UserServiceImpl
             {
                 currentUser.setUsername(user.getUsername()
                     .toLowerCase());
+            }
+            if (user.getFirstName() != null)
+            {
+                currentUser.setFirstName(user.getFirstName());
+            }
+            if (user.getLastName() != null)
+            {
+                currentUser.setLastName(user.getLastName());
+            }
+            if (user.getPhone() != null)
+            {
+                currentUser.setPhone(user.getPhone());
             }
 
             if (user.getRoles()
