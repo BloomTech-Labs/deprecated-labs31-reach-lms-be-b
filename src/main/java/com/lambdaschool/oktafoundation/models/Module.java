@@ -25,7 +25,7 @@ public class Module extends Auditable {
 
     @ManyToOne
     @JoinColumn(name = "courseid")
-    @JsonIgnoreProperties(value = "modules", allowSetters = true)
+    @JsonIgnoreProperties(value = {"program"}, allowSetters = true)
     public Course course;
 
     public Module() {
