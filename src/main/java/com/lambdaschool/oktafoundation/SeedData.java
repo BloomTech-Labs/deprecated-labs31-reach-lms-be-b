@@ -71,8 +71,8 @@ public class SeedData
 	throws Exception {
 		roleService.deleteAll();
 		Role r1 = new Role("admin");
-		Role r2 = new Role("user"); // teacher
-		Role r3 = new Role("data");  // student
+		Role r2 = new Role("teacher"); // teacher
+		Role r3 = new Role("student");  // student
 
 		r1 = roleService.save(r1);
 		r2 = roleService.save(r2);
