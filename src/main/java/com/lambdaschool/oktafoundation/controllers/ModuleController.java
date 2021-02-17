@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@RequestMapping(value = "/modules")
 @RestController
 public class ModuleController {
     @Autowired
     private ModuleService moduleService;
 
-    @GetMapping(value = "/modules/{moduleid}", produces = "application/json")
+    @GetMapping(value = "/module/{moduleid}", produces = "application/json")
     public ResponseEntity<?> fetchSingleModule(@PathVariable long moduleid) throws Exception {
         Module module = moduleService.fetchModuleById(moduleid);
 
@@ -27,15 +28,25 @@ public class ModuleController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @PutMapping(value = "/modules/{moduleid}", consumes = "application/json")
-    public ResponseEntity<?> putCourse(@PathVariable long moduleid,
+    @PutMapping(value = "/module/{moduleid}", consumes = "application/json")
+    public ResponseEntity<?> putModule(@PathVariable long moduleid,
                                        @RequestBody @Valid Module updatedModule){
         updatedModule.setModuleId(moduleid);
         moduleService.save(updatedModule);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @DeleteMapping(value = "/modules/{moduleid}")
+
+    @PatchMapping(value = "/module/{moduleid}", consumes = "application/json")
+    public ResponseEntity<?> patchCourse(@PathVariable long moduleid, @RequestBody Module partiallyEditedModule)
+    {
+        partiallyEditedModule.setModuleId(moduleid);
+        moduleService.edit(partiallyEditedModule);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/module/{moduleid}")
     public ResponseEntity<?> deleteSingleModule(@PathVariable long moduleid){
         moduleService.deleteModuleById(moduleid);
 
