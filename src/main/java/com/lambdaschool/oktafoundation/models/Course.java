@@ -24,7 +24,7 @@ public class Course
     private Program program;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = "course")
+    @JsonIgnoreProperties(value = {"course"}, allowSetters = true)
     Set<Module> modules = new HashSet<>();
 
     public Course()

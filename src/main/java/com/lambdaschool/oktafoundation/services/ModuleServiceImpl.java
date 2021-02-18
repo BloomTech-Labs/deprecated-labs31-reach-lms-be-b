@@ -28,17 +28,20 @@ public class ModuleServiceImpl implements ModuleService{
     public Module save(Module module){
         Module newModule = new Module();
 
-        if (module.getModuleId() != 0){
-            moduleRepository.findById(module.getModuleId())
-                    .orElseThrow(() -> new EntityNotFoundException("Module " + module.getModuleId() + " not found!"));
-            newModule.setModuleId(module.getModuleId());
+        if (module.getModuleid() != 0){
+            moduleRepository.findById(module.getModuleid())
+                    .orElseThrow(() -> new EntityNotFoundException("Module " + module.getModuleid() + " not found!"));
+            newModule.setModuleid(module.getModuleid());
         }
 
-        newModule.setModuleName(module.getModuleName());
-        newModule.setModuleContent(module.getModuleContent());
-        newModule.setModuleDescription(module.getModuleDescription());
+        newModule.setModulename(module.getModulename());
+        newModule.setModulecontent(module.getModulecontent());
+        newModule.setModuledescription(module.getModuledescription());
 
-        return moduleRepository.save(module);
+        // Do we give user ability to change course of module? Right now we are.
+        newModule.setCourse(module.getCourse());
+
+        return moduleRepository.save(newModule);
     }
 
     @Override
@@ -47,29 +50,29 @@ public class ModuleServiceImpl implements ModuleService{
     @Override
     public Module edit(Module partiallyEditedModule)
     {
-        Module newModule = moduleRepository.findById(partiallyEditedModule.getModuleId())
-                .orElseThrow(() -> new EntityNotFoundException("Module with id " + partiallyEditedModule.getModuleId() + " not found!"));
+        Module newModule = moduleRepository.findById(partiallyEditedModule.getModuleid())
+                .orElseThrow(() -> new EntityNotFoundException("Module with id " + partiallyEditedModule.getModuleid() + " not found!"));
 
-        if (partiallyEditedModule.getModuleName() != null)
+        if (partiallyEditedModule.getModulename() != null)
         {
-            newModule.setModuleName(partiallyEditedModule.getModuleName());
+            newModule.setModulename(partiallyEditedModule.getModulename());
         }
 
-        if (partiallyEditedModule.getModuleDescription() != null)
+        if (partiallyEditedModule.getModuledescription() != null)
         {
-            newModule.setModuleDescription(partiallyEditedModule.getModuleDescription());
+            newModule.setModuledescription(partiallyEditedModule.getModuledescription());
         }
 
-        if (partiallyEditedModule.getModuleContent() != null)
+        if (partiallyEditedModule.getModulecontent() != null)
         {
-            newModule.setModuleContent(partiallyEditedModule.getModuleContent());
+            newModule.setModulecontent(partiallyEditedModule.getModulecontent());
         }
 
         //I'm unsure if we will want to give users ability to edit course associated with module through patch
         //I will give ability now, but that may be subject to change.
         if (partiallyEditedModule.getCourse() != null)
         {
-            Course newCourse = courseService.fetchCourseById(partiallyEditedModule.getModuleId());
+            Course newCourse = courseService.fetchCourseById(partiallyEditedModule.getModuleid());
             newModule.setCourse(newCourse);
         }
 
