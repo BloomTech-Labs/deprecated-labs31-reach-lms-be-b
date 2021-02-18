@@ -1,6 +1,5 @@
 package com.lambdaschool.oktafoundation.services;
-
-import com.lambdaschool.oktafoundation.exceptions.ResourceFoundException;
+import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
 import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.ProgramRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +31,9 @@ public class ProgramServiceImpl implements ProgramService {
         return list;
     }
     @Override
-    public Program findProgramById(long id) throws ResourceFoundException{
+    public Program findProgramById(long id) throws ResourceNotFoundException {
         return programrepos.findById(id)
-                .orElseThrow(() -> new ResourceFoundException("Program id " + id + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Program id " + id + " not found!"));
     }
 
     @Override
@@ -42,7 +41,7 @@ public class ProgramServiceImpl implements ProgramService {
         Program p = programrepos.findByProgramName(name);
         if (p == null)
         {
-            throw new ResourceFoundException("Program name " + name + " not found!");
+            throw new ResourceNotFoundException("Program name " + name + " not found!");
         }
         return p;
     }
@@ -50,7 +49,7 @@ public class ProgramServiceImpl implements ProgramService {
     @Override
     public void delete(long id) {
         programrepos.findById(id)
-                .orElseThrow(() -> new ResourceFoundException("Program id " + id + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Program id " + id + " not found!"));
         programrepos.deleteById(id);
     }
 
@@ -62,7 +61,7 @@ public class ProgramServiceImpl implements ProgramService {
         if (program.getProgramId() != 0)
         {
             programrepos.findById(program.getProgramId())
-                    .orElseThrow(() -> new ResourceFoundException("Program id " + program.getProgramId() + " not found!"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Program id " + program.getProgramId() + " not found!"));
             newProgram.setProgramId(program.getProgramId());
         }
 
@@ -156,6 +155,9 @@ public class ProgramServiceImpl implements ProgramService {
                 }
             }
 
+        } else
+        {
+            throw new ResourceNotFoundException("This user is not authorized to make change");
         }
         return currentProgram;
     }
