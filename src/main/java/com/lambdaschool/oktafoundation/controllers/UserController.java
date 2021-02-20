@@ -1,6 +1,6 @@
 package com.lambdaschool.oktafoundation.controllers;
 
-import com.lambdaschool.oktafoundation.models.User;
+import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +15,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The entry point for clients to access user data
@@ -226,5 +228,31 @@ public class UserController
         User u = userService.findByName(authentication.getName());
         return new ResponseEntity<>(u,
             HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getuserprograms", produces = "application/json")
+    public ResponseEntity<?> getCurrentUserPrograms(Authentication authentication)
+    {
+        User u = userService.findByName(authentication.getName());
+        List<Program> currentUserPrograms = new ArrayList<>();
+        for(UserRoles ur : u.getRoles())
+        {
+            String role = ur.getRole().getName().toLowerCase();
+            switch(role){
+                case "admin":
+                    for(Program p : u.getAdminPrograms()){
+                        currentUserPrograms.add(p);
+                    }
+                case "teacher":
+                    for(UserTeachers ut : u.getTeacherPrograms()){
+                        currentUserPrograms.add(ut.getProgram());
+                    }
+                case "student":
+                    for(UserStudents us : u.getStudentPrograms()){
+                        currentUserPrograms.add(us.getProgram());
+                    }
+            }
+        }
+        return new ResponseEntity<>(currentUserPrograms, HttpStatus.OK);
     }
 }

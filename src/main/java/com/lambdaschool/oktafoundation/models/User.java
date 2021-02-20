@@ -2,7 +2,6 @@ package com.lambdaschool.oktafoundation.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
@@ -63,15 +62,15 @@ public class User
     private Set<UserRoles> roles = new HashSet<>();
 
     @OneToMany(mappedBy ="admin", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = "admin", allowSetters = true)
+    @JsonIgnore
     private Set<Program> adminPrograms = new HashSet<>();
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = "teacher", allowSetters = true)
+    @JsonIgnore
     private Set<UserTeachers> teacherPrograms = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = "user", allowSetters = true)
+    @JsonIgnore
     private Set<UserStudents> studentPrograms = new HashSet<>();
 
 
