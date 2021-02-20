@@ -47,13 +47,13 @@ public class CourseServiceImpl implements CourseService
         newCourse.getModules().clear();
         for (Module m : course.getModules())
         {
-            if (m.getModuleid() > 0)
+            if (m.getModuleId() > 0)
             {
-                moduleService.fetchModuleById(m.getModuleid());
+                moduleService.fetchModuleById(m.getModuleId());
             }
             else
             {
-                m.setModuleid(0);
+                m.setModuleId(0);
                 moduleService.save(m);
             }
             newCourse.getModules().add(m);
@@ -110,7 +110,7 @@ public class CourseServiceImpl implements CourseService
             currentCourse.getModules().clear();
             for (Module m : partiallyEditedCourse.getModules())
             {
-                Module module = moduleService.fetchModuleById(m.getModuleid());
+                Module module = moduleService.fetchModuleById(m.getModuleId());
 
                 currentCourse.getModules().add(module);
             }

@@ -1,11 +1,16 @@
 package com.lambdaschool.oktafoundation.controllers;
 
 import com.lambdaschool.oktafoundation.models.Program;
+import com.lambdaschool.oktafoundation.models.User;
+import com.lambdaschool.oktafoundation.services.HelperFunctions;
 import com.lambdaschool.oktafoundation.services.ProgramService;
+import com.lambdaschool.oktafoundation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -19,6 +24,12 @@ import java.util.List;
 public class ProgramController {
     @Autowired
     private ProgramService programServices;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private HelperFunctions helperFunctions;
 
     @GetMapping(value = "/programs", produces = "application/json")
     public ResponseEntity<?> listAllPrograms()
@@ -42,6 +53,8 @@ public class ProgramController {
     @PostMapping(value = "/program", consumes = "application/json")
     public ResponseEntity<?> addNewProgram(@Valid @RequestBody Program newProgram) throws Exception
     {
+        User admin = userService.findByName(helperFunctions.getAuthorizedUserUserName());
+        newProgram.setAdmin(admin);
         newProgram.setProgramId(0);
         newProgram = programServices.save(newProgram);
 
@@ -59,6 +72,8 @@ public class ProgramController {
     public ResponseEntity<?> updateFullProgram(@Valid @RequestBody Program updateProgram,
                                                @PathVariable long programid) throws Exception
     {
+        User admin = userService.findByName(helperFunctions.getAuthorizedUserUserName());
+        updateProgram.setAdmin(admin);
         updateProgram.setProgramId(programid);
         programServices.save(updateProgram);
         return new ResponseEntity<>(HttpStatus.OK);

@@ -1,6 +1,7 @@
 package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.models.ValidationError;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface HelperFunctions
      * @return true if the user can make the modifications, otherwise an exception is thrown
      */
     boolean isAuthorizedToMakeChange(String username);
+
+    String getAuthorizedUserUserName();
 }
