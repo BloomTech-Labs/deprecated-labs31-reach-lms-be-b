@@ -1,7 +1,7 @@
 package com.lambdaschool.oktafoundation.models;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -25,7 +25,7 @@ public class Module extends Auditable {
 
     @ManyToOne
     @JoinColumn(name = "courseid")
-    @JsonIgnoreProperties(value = {"program", "modules"}, allowSetters = true)
+    @JsonIgnore
     public Course course;
 
     public Module() {

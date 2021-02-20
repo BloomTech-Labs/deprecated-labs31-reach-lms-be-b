@@ -1,5 +1,5 @@
 package com.lambdaschool.oktafoundation.models;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -19,12 +19,11 @@ public class Course
 
     @ManyToOne
     @JoinColumn(name="programId")
-//    this needs to not be camel case otherwise Spring gets confused
-    @JsonIgnoreProperties(value = "courses", allowSetters = true)
+    @JsonIgnore
     private Program program;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = {"course"}, allowSetters = true)
+    @JsonIgnore
     Set<Module> modules = new HashSet<>();
 
     public Course()

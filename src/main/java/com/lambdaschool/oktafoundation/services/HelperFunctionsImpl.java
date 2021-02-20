@@ -90,10 +90,4 @@ public class HelperFunctionsImpl
             throw new ResourceNotFoundException(authentication.getName() + " not authorized to make change");
         }
     }
-
-    @Override
-    public String getAuthorizedUserUserName() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getName();
-    }
 }

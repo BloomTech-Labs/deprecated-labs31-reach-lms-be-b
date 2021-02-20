@@ -28,5 +28,4 @@ public interface HelperFunctions
      */
     boolean isAuthorizedToMakeChange(String username);
 
-    String getAuthorizedUserUserName();
 }
