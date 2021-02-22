@@ -62,6 +62,7 @@ public class CourseServiceImpl implements CourseService
             else
             {
                 m.setModuleId(0);
+                m.setCourse(newCourse);
                 m = moduleService.save(m);
             }
             newCourse.getModules().add(m);

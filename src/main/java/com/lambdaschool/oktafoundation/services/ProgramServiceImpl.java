@@ -96,6 +96,7 @@ public class ProgramServiceImpl implements ProgramService {
                 c = courseService.fetchCourseById(c.getCourseid());
             } else {
                 c.setCourseid(0);
+                c.setProgram(newProgram);
                 c = courseService.save(c);
             }
             newProgram.getCourses().add(c);
