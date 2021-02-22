@@ -1,8 +1,10 @@
 package com.lambdaschool.oktafoundation.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lambdaschool.oktafoundation.OktaFoundationApplicationTest;
 import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.repository.CourseRespository;
+import com.lambdaschool.oktafoundation.repository.UserRepository;
 import com.lambdaschool.oktafoundation.services.CourseService;
 import com.lambdaschool.oktafoundation.services.UserService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -10,21 +12,32 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.swing.*;
+import java.lang.Module;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT ,
@@ -45,13 +58,9 @@ public class CourseControllerUnitTestNoDB
     private CourseService courseService;
 
     @MockBean
-    private CourseRespository courseRespository;
+    private UserRepository userRepository;
 
     private List<Course> courseList;
-
-    private List<User> userList;
-
-    private List<Program> programList;
 
     private User u1;
 
@@ -93,7 +102,6 @@ public class CourseControllerUnitTestNoDB
                 .setUseremailid(11);
 
         u1.setUserid(101);
-        userList.add(u1);
 
         Program p1 = new Program();
         p1.setProgramId(20);
@@ -120,10 +128,8 @@ public class CourseControllerUnitTestNoDB
         //linking c2 to p1
         p1.getCourses().add(c2);
 
-        programList.add(p1);
         courseList.add(c1);
-        System.out.println(c1.getProgram().toString());
-
+        System.out.println(courseList);
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
 
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -141,7 +147,160 @@ public class CourseControllerUnitTestNoDB
     {
         String apiUrl = "/courses/courses";
 
-        Mockito.when(courseRespository.findAll())
+        Mockito.when(userRepository.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(courseService.getAllCourses())
                 .thenReturn(courseList);
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult r = mockMvc.perform(rb)
+                .andReturn();
+
+        String tr = r.getResponse()
+                .getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String er = mapper.writeValueAsString(courseList);
+
+        System.out.println("Expect: " + er);
+        System.out.println("Actual: " + tr);
+
+        assertEquals(er, tr);
+    }
+
+    @Test
+    public void fetchCourseById() throws Exception
+    {
+        String apiUrl = "/courses/course/21";
+
+        Mockito.when(userRepository.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(courseService.fetchCourseById(21L))
+                .thenReturn(courseList.get(0));
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult r = mockMvc.perform(rb)
+                .andReturn();
+        String tr = r.getResponse()
+                .getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String er = mapper.writeValueAsString(courseList.get(0));
+
+        assertEquals(er, tr);
+    }
+
+    @Test
+    public void fetchCourseIdNotFound() throws Exception
+    {
+        String apiUrl = "/courses/course/50";
+
+        Mockito.when(userRepository.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(courseService.fetchCourseById(50L))
+                .thenReturn(null);
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult r = mockMvc.perform(rb)
+                .andReturn();
+        String tr = r.getResponse()
+                .getContentAsString();
+
+        String er = "";
+
+        assertEquals(er, tr);
+    }
+
+    @Test
+    public void fetchCourseModules() throws Exception
+    {
+        String apiUrl = "/courses/course/{courseid}/modules";
+
+        Mockito.when(userRepository.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(courseService.fe)
+    }
+
+    @Test
+    public void addNewCourse() throws Exception
+    {
+        String apiUrl = "/courses/courses";
+
+        Mockito.when(userRepository.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(courseService.save(any(Course.class)))
+                .thenReturn(courseList.get(0));
+
+        RequestBuilder rb = MockMvcRequestBuilders.post(apiUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content("{\"coursename\" : \"Testing New Course\", \"coursecode\" : \"ABC123ABC123\"}");
+
+        mockMvc.perform(rb)
+                .andExpect(status().is2xxSuccessful())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void updateExistingCourse() throws Exception
+    {
+        String apiUrl = "/courses/course/{courseid}";
+
+        Mockito.when(userRepository.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(courseService.save(any(Course.class)))
+                .thenReturn(courseList.get(0));
+        RequestBuilder rb = MockMvcRequestBuilders.put(apiUrl, 21L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content("{\"coursename\" : \"Testing New Course\", \"coursecode\" : \"ABC123ABC123\"}");
+        mockMvc.perform(rb)
+                .andExpect(status().is2xxSuccessful())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void patchExistingCourse() throws Exception
+    {
+        String apiUrl = "/courses/patchcourse/{courseid}";
+
+        Mockito.when(userRepository.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(courseService.edit(any(Course.class)))
+                .thenReturn(courseList.get(0));
+        RequestBuilder rb = MockMvcRequestBuilders.patch(apiUrl, 21L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content("{\"coursename\" : \"Testing New Course\", \"coursecode\" : \"ABC123ABC123\"}");
+        mockMvc.perform(rb)
+                .andExpect(status().is2xxSuccessful())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void deleteCourseById() throws Exception
+    {
+        String apiUrl = "/courses/course/{courseid}";
+        RequestBuilder rb = MockMvcRequestBuilders.delete(apiUrl, 21L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+        Mockito.when(userRepository.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        mockMvc.perform(rb)
+                .andExpect(status().is2xxSuccessful())
+                .andDo(MockMvcResultHandlers.print());
     }
 }
