@@ -227,7 +227,19 @@ public class CourseControllerUnitTestNoDB
         Mockito.when(userRepository.findByUsername(u1.getUsername()))
                 .thenReturn(u1);
 
-        Mockito.when(courseService.fe)
+        Mockito.when(courseService.fetchCourseById(21L))
+                .thenReturn(courseList.get(0));
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl, 21L)
+                .accept(MediaType.APPLICATION_JSON);
+        MvcResult r = mockMvc.perform(rb)
+                .andReturn();
+        String tr = r.getResponse()
+                .getContentAsString();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String er = objectMapper.writeValueAsString(courseList.get(0).getModules());
+
+        assertEquals(er, tr);
     }
 
     @Test
