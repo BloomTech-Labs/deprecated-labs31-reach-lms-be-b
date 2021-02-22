@@ -40,7 +40,7 @@ public class CourseController
         return new ResponseEntity<>(c.getModules(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/courses", consumes = "application/json")
+    @PostMapping(value = "/course", consumes = "application/json")
     public ResponseEntity<?> postCourse(@RequestBody @Valid Course newCourse) throws Exception
     {
         newCourse.setCourseid(0);
