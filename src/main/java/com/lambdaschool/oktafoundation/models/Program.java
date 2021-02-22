@@ -1,6 +1,7 @@
 package com.lambdaschool.oktafoundation.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "programs")
+@JsonIgnoreProperties(value = {"courses", "students", "teachers", "admin"}, allowSetters = true)
 public class Program extends Auditable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,20 +28,16 @@ public class Program extends Auditable{
     private String programDescription;
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<Course> courses = new ArrayList<>();
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private Set<UserStudents> students = new HashSet<>();
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private Set<UserTeachers> teachers = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "userid")
-    @JsonIgnore
     private User admin;
 
 

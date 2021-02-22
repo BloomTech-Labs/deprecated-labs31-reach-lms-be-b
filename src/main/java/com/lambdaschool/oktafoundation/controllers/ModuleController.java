@@ -32,7 +32,7 @@ public class ModuleController {
         return new ResponseEntity<>(moduleList, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/modules", consumes = "application/json")
+    @PostMapping(value = "/module", consumes = "application/json")
     public ResponseEntity<?> postModule(@RequestBody @Valid Module newModule)
     {
         newModule.setModuleId(0);

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "modules")
-@JsonIgnoreProperties(value = {"courses"}, allowSetters = true)
+@JsonIgnoreProperties(value = {"course"}, allowSetters = true)
 public class Module extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

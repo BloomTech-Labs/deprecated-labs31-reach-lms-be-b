@@ -58,7 +58,7 @@ public class CourseController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping(value = "/patchcourse/{courseid}", consumes = "application/json")
+    @PatchMapping(value = "/course/{courseid}", consumes = "application/json")
     public ResponseEntity<?> patchCourse(@PathVariable long courseid, @RequestBody Course partiallyEditedCourse) throws Exception
     {
         partiallyEditedCourse.setCourseid(courseid);
