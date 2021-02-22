@@ -39,7 +39,8 @@ public class ModuleServiceImpl implements ModuleService{
         newModule.setModuleDescription(module.getModuleDescription());
 
         // Do we give user ability to change course of module? Right now we are.
-        newModule.setCourse(module.getCourse());
+        Course c = courseService.fetchCourseById(module.getCourse().getCourseid());
+        newModule.setCourse(c);
 
         return moduleRepository.save(newModule);
     }

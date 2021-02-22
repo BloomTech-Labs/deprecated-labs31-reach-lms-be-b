@@ -3,6 +3,7 @@ package com.lambdaschool.oktafoundation.services;
 import com.lambdaschool.oktafoundation.exceptions.ResourceFoundException;
 import com.lambdaschool.oktafoundation.models.Course;
 import com.lambdaschool.oktafoundation.models.Module;
+import com.lambdaschool.oktafoundation.models.Program;
 import com.lambdaschool.oktafoundation.repository.CourseRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class CourseServiceImpl implements CourseService
 
     @Autowired
     ModuleService moduleService;
+
+    @Autowired
+    ProgramService programService;
 
     @Override
     public Course fetchCourseById(long courseid) throws ResourceFoundException
@@ -42,19 +46,24 @@ public class CourseServiceImpl implements CourseService
         newCourse.setCoursename(course.getCoursename());
         newCourse.setCoursecode(course.getCoursecode());
         newCourse.setCoursedescription(course.getCoursedescription());
-        newCourse.setProgram(course.getProgram());
+
+        Program p = programService.findProgramById(course.getProgram().getProgramId());
+        newCourse.setProgram(p);
+
+        newCourse = courseRespository.save(newCourse);
 
         newCourse.getModules().clear();
         for (Module m : course.getModules())
         {
             if (m.getModuleId() > 0)
             {
-                moduleService.fetchModuleById(m.getModuleId());
+                m = moduleService.fetchModuleById(m.getModuleId());
             }
             else
             {
                 m.setModuleId(0);
-                moduleService.save(m);
+                m.setCourse(newCourse);
+                m = moduleService.save(m);
             }
             newCourse.getModules().add(m);
         }

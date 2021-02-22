@@ -72,6 +72,8 @@ public class ProgramServiceImpl implements ProgramService {
         newProgram.setProgramType(program.getProgramType());
         newProgram.setProgramDescription(program.getProgramDescription());
 
+        newProgram = programrepos.save(newProgram);
+
         newProgram.getTeachers().clear();
         for (UserTeachers ut : program.getTeachers())
         {
@@ -94,6 +96,7 @@ public class ProgramServiceImpl implements ProgramService {
                 c = courseService.fetchCourseById(c.getCourseid());
             } else {
                 c.setCourseid(0);
+                c.setProgram(newProgram);
                 c = courseService.save(c);
             }
             newProgram.getCourses().add(c);

@@ -101,8 +101,7 @@ public class SeedData
 		p1.setProgramDescription("This is a introduction to the basics of Python. Get ready to bang your head against the desk");
 		p1.setProgramType("Introductory");
 		p1.setAdmin(u1);
-		p1 = programService.save(p1);
-		
+
 		Course c1 = new Course();
 		c1.setCoursename("Functions");
 		c1.setCoursecode("PBfunctions");
@@ -117,14 +116,17 @@ public class SeedData
 		m1.setModuleContent("This is the content for this module. Python functions start with def didn't you know?");
 		m1.setModuleDescription("This is a more in depth description about how Pythons functions start with def. How many licks does it take to get to the center of a tootsie pop? The world may never know.");
 		m1.setCourse(c1);
-		moduleService.save(m1);
 
 		Module m2 = new Module();
 		m2.setModuleName("Syntax");
 		m2.setModuleContent("This is the content for this module. Python functions start with def didn't you know?");
 		m2.setModuleDescription("This is a more in depth description about how Pythons functions start with def. How many licks does it take to get to the center of a tootsie pop? The world may never know.");
 		m2.setCourse(c1);
-		moduleService.save(m2);
+
+		c1.getModules().add(m1);
+		c1.getModules().add(m2);
+
+		p1 = programService.save(p1);
 
 		userTeachersService.save(u2.getUserid(), p1.getProgramId());
 		userStudentsService.save(u3.getUserid(), p1.getProgramId());
