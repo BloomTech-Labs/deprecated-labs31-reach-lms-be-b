@@ -1,7 +1,7 @@
 package com.lambdaschool.oktafoundation.models;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,61 +12,61 @@ import javax.validation.constraints.NotNull;
 public class Module extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long moduleid;
+    private long moduleId;
 
     @NotNull
-    private String modulename;
+    private String moduleName;
 
     @NotNull
-    private String moduledescription;
+    private String moduleDescription;
 
     @NotNull
-    private String modulecontent;
+    private String moduleContent;
 
     @ManyToOne
     @JoinColumn(name = "courseid")
-    @JsonIgnoreProperties(value = {"program", "modules"}, allowSetters = true)
+    @JsonIgnore
     public Course course;
 
     public Module() {
     }
 
-    public Module(@NotNull String modulename, @NotNull String moduledescription, @NotNull String modulecontent) {
-        this.modulename = modulename;
-        this.moduledescription = moduledescription;
-        this.modulecontent = modulecontent;
+    public Module(@NotNull String moduleName, @NotNull String moduleDescription, @NotNull String moduleContent) {
+        this.moduleName = moduleName;
+        this.moduleDescription = moduleDescription;
+        this.moduleContent = moduleContent;
     }
 
-    public long getModuleid() {
-        return moduleid;
+    public long getModuleId() {
+        return moduleId;
     }
 
-    public void setModuleid(long moduleid) {
-        this.moduleid = moduleid;
+    public void setModuleId(long moduleid) {
+        this.moduleId = moduleid;
     }
 
-    public String getModulename() {
-        return modulename;
+    public String getModuleName() {
+        return moduleName;
     }
 
-    public void setModulename(String modulename) {
-        this.modulename = modulename;
+    public void setModuleName(String modulename) {
+        this.moduleName = modulename;
     }
 
-    public String getModuledescription() {
-        return moduledescription;
+    public String getModuleDescription() {
+        return moduleDescription;
     }
 
-    public void setModuledescription(String moduledescription) {
-        this.moduledescription = moduledescription;
+    public void setModuleDescription(String moduledescription) {
+        this.moduleDescription = moduledescription;
     }
 
-    public String getModulecontent() {
-        return modulecontent;
+    public String getModuleContent() {
+        return moduleContent;
     }
 
-    public void setModulecontent(String modulecontent) {
-        this.modulecontent = modulecontent;
+    public void setModuleContent(String modulecontent) {
+        this.moduleContent = modulecontent;
     }
 
     public Course getCourse()

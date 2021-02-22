@@ -35,7 +35,7 @@ public class ModuleController {
     @PostMapping(value = "/modules", consumes = "application/json")
     public ResponseEntity<?> postModule(@RequestBody @Valid Module newModule)
     {
-        newModule.setModuleid(0);
+        newModule.setModuleId(0);
         moduleService.save(newModule);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -45,7 +45,7 @@ public class ModuleController {
     public ResponseEntity<?> putModule(@PathVariable long moduleid,
                                        @RequestBody @Valid Module updatedModule)
     {
-        updatedModule.setModuleid(moduleid);
+        updatedModule.setModuleId(moduleid);
         moduleService.save(updatedModule);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -54,7 +54,7 @@ public class ModuleController {
     @PatchMapping(value = "/module/{moduleid}", consumes = "application/json")
     public ResponseEntity<?> patchCourse(@PathVariable long moduleid, @RequestBody Module partiallyEditedModule)
     {
-        partiallyEditedModule.setModuleid(moduleid);
+        partiallyEditedModule.setModuleId(moduleid);
         moduleService.edit(partiallyEditedModule);
 
         return new ResponseEntity<>(HttpStatus.OK);

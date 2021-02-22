@@ -33,6 +33,13 @@ public class CourseController
         return new ResponseEntity<>(coursesList, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/course/{courseid}/modules", produces = "application/json")
+    public ResponseEntity<?> fetchCourseModules(@PathVariable long courseid)
+    {
+        Course c = courseService.fetchCourseById(courseid);
+        return new ResponseEntity<>(c.getModules(), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/courses", consumes = "application/json")
     public ResponseEntity<?> postCourse(@RequestBody @Valid Course newCourse) throws Exception
     {
