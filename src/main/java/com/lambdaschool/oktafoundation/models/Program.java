@@ -1,6 +1,6 @@
 package com.lambdaschool.oktafoundation.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -26,20 +26,20 @@ public class Program extends Auditable{
     private String programDescription;
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = "program", allowSetters = true)
+    @JsonIgnore
     private List<Course> courses = new ArrayList<>();
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value="program", allowSetters = true)
+    @JsonIgnore
     private Set<UserStudents> students = new HashSet<>();
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value="program", allowSetters = true)
+    @JsonIgnore
     private Set<UserTeachers> teachers = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "userid")
-    @JsonIgnoreProperties(value = {"adminPrograms", "studentPrograms", "teacherPrograms"}, allowSetters = true)
+    @JsonIgnore
     private User admin;
 
 

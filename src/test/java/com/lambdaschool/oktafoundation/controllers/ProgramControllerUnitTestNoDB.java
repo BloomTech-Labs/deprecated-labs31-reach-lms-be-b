@@ -69,7 +69,7 @@ public class ProgramControllerUnitTestNoDB {
         u1.setUserid(1);
         u1.getRoles().add(new UserRoles(u1, r1));
 
-        com.lambdaschool.oktafoundation.models.Module m1 = new com.lambdaschool.oktafoundation.models.Module();
+        Module m1 = new Module();
         m1.setModuleId(1);
         m1.setModuleName("useState");
         m1.setModuleDescription("Learn about the useState hook.");
@@ -90,7 +90,7 @@ public class ProgramControllerUnitTestNoDB {
         p1.setProgramDescription("Intro to React");
         p1.getCourses().add(c1);
 
-        com.lambdaschool.oktafoundation.models.Module m2 = new Module();
+       Module m2 = new Module();
         m2.setModuleId(1);
         m2.setModuleName("Controllers");
         m2.setModuleDescription("Learn about making controllers");
