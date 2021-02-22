@@ -46,7 +46,9 @@ public class ModuleServiceImpl implements ModuleService{
     }
 
     @Override
-    public void deleteModuleById(long moduleid){ moduleRepository.deleteById(moduleid);}
+    public void deleteModuleById(long moduleid){
+        moduleRepository.findById(moduleid).orElseThrow(() -> new EntityNotFoundException("Module with id " + moduleid + " not found!"));
+        moduleRepository.deleteById(moduleid);}
 
     @Override
     public Module edit(Module partiallyEditedModule)
