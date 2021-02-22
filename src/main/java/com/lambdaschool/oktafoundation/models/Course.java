@@ -1,5 +1,6 @@
 package com.lambdaschool.oktafoundation.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -7,6 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "courses")
+@JsonIgnoreProperties(value = {"program", "modules"}, allowSetters = true)
 public class Course
 {
     @Id
@@ -19,11 +21,9 @@ public class Course
 
     @ManyToOne
     @JoinColumn(name="programId")
-    @JsonIgnore
     private Program program;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     Set<Module> modules = new HashSet<>();
 
     public Course()

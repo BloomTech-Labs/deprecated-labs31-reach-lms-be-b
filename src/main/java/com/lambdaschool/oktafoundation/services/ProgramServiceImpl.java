@@ -72,6 +72,8 @@ public class ProgramServiceImpl implements ProgramService {
         newProgram.setProgramType(program.getProgramType());
         newProgram.setProgramDescription(program.getProgramDescription());
 
+        newProgram = programrepos.save(newProgram);
+
         newProgram.getTeachers().clear();
         for (UserTeachers ut : program.getTeachers())
         {
