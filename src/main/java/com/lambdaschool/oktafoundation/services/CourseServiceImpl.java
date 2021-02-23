@@ -53,18 +53,9 @@ public class CourseServiceImpl implements CourseService
         newCourse = courseRespository.save(newCourse);
 
         newCourse.getModules().clear();
-        for (Module m : course.getModules())
-        {
-            if (m.getModuleId() > 0)
-            {
-                m = moduleService.fetchModuleById(m.getModuleId());
-            }
-            else
-            {
-                m.setModuleId(0);
-                m.setCourse(newCourse);
-                m = moduleService.save(m);
-            }
+        for (Module m : course.getModules()) {
+            m.setCourse(newCourse);
+            m = moduleService.save(m);
             newCourse.getModules().add(m);
         }
         return courseRespository.save(newCourse);
@@ -120,9 +111,9 @@ public class CourseServiceImpl implements CourseService
             currentCourse.getModules().clear();
             for (Module m : partiallyEditedCourse.getModules())
             {
-                Module module = moduleService.fetchModuleById(m.getModuleId());
-
-                currentCourse.getModules().add(module);
+                m.setCourse(currentCourse);
+                m = moduleService.save(m);
+                currentCourse.getModules().add(m);
             }
         }
 

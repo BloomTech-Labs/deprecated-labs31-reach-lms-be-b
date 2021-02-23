@@ -91,14 +91,8 @@ public class ProgramServiceImpl implements ProgramService {
         newProgram.getCourses().clear();
         for (Course c : program.getCourses())
         {
-            if(c.getCourseid() > 0)
-            {
-                c = courseService.fetchCourseById(c.getCourseid());
-            } else {
-                c.setCourseid(0);
-                c.setProgram(newProgram);
-                c = courseService.save(c);
-            }
+            c.setProgram((newProgram));
+            c = courseService.save(c);
             newProgram.getCourses().add(c);
         }
 
@@ -147,13 +141,8 @@ public class ProgramServiceImpl implements ProgramService {
                 currentProgram.getCourses().clear();
                 for(Course c : program.getCourses())
                 {
-                    if(c.getCourseid() > 0)
-                    {
-                        c = courseService.fetchCourseById(c.getCourseid());
-                    } else {
-                        c.setCourseid(0);
-                        c = courseService.save(c);
-                    }
+                    c.setProgram(currentProgram);
+                    c = courseService.save(c);
                     currentProgram.getCourses().add(c);
                 }
             }
