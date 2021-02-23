@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
@@ -113,6 +114,9 @@ public class ProgramControllerUnitTestNoDB {
 
         programList.add(p1);
         programList.add(p2);
+
+        p1.getTeachers().add(new UserTeachers(u1, p1));
+        p1.getStudents().add(new UserStudents(u1, p1));
 
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
 
@@ -301,5 +305,99 @@ public class ProgramControllerUnitTestNoDB {
         mockMvc.perform(rb)
                 .andExpect(status().is2xxSuccessful())
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void getProgramCourses() throws Exception {
+        String apiUrl = "/programs/program/{programId}/courses";
+
+        Mockito.when(userrepos.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(programService.findProgramById(1L))
+                .thenReturn(programList.get(0));
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl, 1L)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult r = mockMvc.perform(rb)
+                .andReturn();
+
+        String tr = r.getResponse()
+                .getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String er = mapper.writeValueAsString(programList.get(0).getCourses());
+
+        System.out.println("Expect: " + er);
+        System.out.println("Actual: " + tr);
+
+        assertEquals(er, tr);
+    }
+
+    @Test
+    public void getProgramTeachers() throws Exception {
+        String apiUrl = "/programs/program/{programId}/teachers";
+
+        Mockito.when(userrepos.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(programService.findProgramById(1L))
+                .thenReturn(programList.get(0));
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl, 1L)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult r = mockMvc.perform(rb)
+                .andReturn();
+
+        String tr = r.getResponse()
+                .getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<User> lp = new ArrayList<>();
+        for (UserTeachers ut : programList.get(0).getTeachers())
+        {
+            lp.add(ut.getTeacher());
+        }
+        String er = mapper.writeValueAsString(lp);
+
+        System.out.println("Expect: " + er);
+        System.out.println("Actual: " + tr);
+
+        assertEquals(er, tr);
+    }
+
+    @Test
+    public void getProgramStudents() throws Exception {
+        String apiUrl = "/programs/program/{programId}/students";
+
+        Mockito.when(userrepos.findByUsername(u1.getUsername()))
+                .thenReturn(u1);
+
+        Mockito.when(programService.findProgramById(1L))
+                .thenReturn(programList.get(0));
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl, 1L)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult r = mockMvc.perform(rb)
+                .andReturn();
+
+        String tr = r.getResponse()
+                .getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<User> lp = new ArrayList<>();
+        for (UserStudents us : programList.get(0).getStudents())
+        {
+            lp.add(us.getUser());
+        }
+        String er = mapper.writeValueAsString(lp);
+
+        System.out.println("Expect: " + er);
+        System.out.println("Actual: " + tr);
+
+        assertEquals(er, tr);
     }
 }
