@@ -153,6 +153,7 @@ public class ModuleServiceImplTestUnitNoDB
         c1.setCoursecode("Web 36 React");
         c1.setCoursedescription("A look at commonly used React Hooks.");
         c1.getModules().add(m1);
+        m1.setCourse(c1);
 
         Course c2 = new Course();
         c1.setCoursename("Hooks");
@@ -173,6 +174,8 @@ public class ModuleServiceImplTestUnitNoDB
 
         Mockito.when(moduleRepository.findById(1L))
                 .thenReturn(Optional.of(m1));
+        Mockito.when(courseService.fetchCourseById(1L))
+                .thenReturn(c1);
         Mockito.when(moduleRepository.save(any(Module.class)))
                 .thenReturn(m1);
 
@@ -201,6 +204,7 @@ public class ModuleServiceImplTestUnitNoDB
         c1.setCoursecode("Web 36 React");
         c1.setCoursedescription("A look at commonly used React Hooks.");
         c1.getModules().add(m1);
+        m1.setCourse(c1);
 
         Course c2 = new Course();
         c1.setCoursename("Hooks");
@@ -221,6 +225,8 @@ public class ModuleServiceImplTestUnitNoDB
 
         Mockito.when(moduleRepository.findById(1L))
                 .thenReturn(Optional.of(m1));
+        Mockito.when(courseService.fetchCourseById(1L))
+                .thenReturn(c1);
         Mockito.when(moduleRepository.save(any(Module.class)))
                 .thenReturn(m1);
 
