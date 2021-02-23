@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,25 +151,30 @@ public class CourseServiceImplUnitTestNoDB
     {
         Role r1 = new Role("admin");
         r1.setRoleid(1);
+
         User u1 = new User("test@reachlms.com", "John", "Doe", "18005551234");
         u1.setUserid(1);
         u1.getRoles().add(new UserRoles(u1, r1));
+
         Module m1 = new Module();
         m1.setModuleId(1);
         m1.setModuleName("useState");
         m1.setModuleDescription("Learn about the useState hook.");
         m1.setModuleContent("useState sets up state for a component.");
+
         Course c1 = new Course();
         c1.setCourseid(1);
         c1.setCoursename("Hooks");
         c1.setCoursecode("Web 36 React");
         c1.setCoursedescription("A look at commonly used React Hooks.");
         c1.getModules().add(m1);
+
         Course c2 = new Course();
         c1.setCoursename("Hooks");
         c1.setCoursecode("Web 36 React");
         c1.setCoursedescription("A look at commonly used React Hooks.");
         c1.getModules().add(m1);
+
         Program p1 = new Program();
         p1.setProgramId(0);
         p1.setAdmin(u1);
@@ -179,10 +185,14 @@ public class CourseServiceImplUnitTestNoDB
         p1.getCourses().add(c2);
         p1.getTeachers().add(new UserTeachers(u1, p1));
         p1.getStudents().add(new UserStudents(u1, p1));
+        c1.setProgram(p1);
+
         Mockito.when(userService.findUserById(1L))
                 .thenReturn(u1);
         Mockito.when(courseRespository.findById(1L))
                 .thenReturn(Optional.of(c1));
+        Mockito.when(programService.findProgramById(1L))
+                .thenReturn(p1);
         Mockito.when(courseRespository.save(any(Course.class)))
                 .thenReturn(c1);
         assertEquals("Hooks", courseService.save(c1).getCoursename());
@@ -193,25 +203,30 @@ public class CourseServiceImplUnitTestNoDB
     {
         Role r1 = new Role("admin");
         r1.setRoleid(1);
+
         User u1 = new User("test@reachlms.com", "John", "Doe", "18005551234");
         u1.setUserid(1);
         u1.getRoles().add(new UserRoles(u1, r1));
+
         Module m1 = new Module();
         m1.setModuleId(1);
         m1.setModuleName("useState");
         m1.setModuleDescription("Learn about the useState hook.");
         m1.setModuleContent("useState sets up state for a component.");
+
         Course c1 = new Course();
         c1.setCourseid(1);
         c1.setCoursename("Hooks");
         c1.setCoursecode("Web 36 React");
         c1.setCoursedescription("A look at commonly used React Hooks.");
         c1.getModules().add(m1);
+
         Course c2 = new Course();
         c1.setCoursename("Hooks");
         c1.setCoursecode("Web 36 React");
         c1.setCoursedescription("A look at commonly used React Hooks.");
         c1.getModules().add(m1);
+
         Program p1 = new Program();
         p1.setProgramId(0);
         p1.setAdmin(u1);
@@ -222,8 +237,12 @@ public class CourseServiceImplUnitTestNoDB
         p1.getCourses().add(c2);
         p1.getTeachers().add(new UserTeachers(u1, p1));
         p1.getStudents().add(new UserStudents(u1, p1));
+        c1.setProgram(p1);
+
         Mockito.when(userService.findUserById(1L))
                 .thenReturn(u1);
+        Mockito.when(programService.findProgramById(1L))
+                .thenReturn(p1);
         Mockito.when(courseRespository.findById(1L))
                 .thenReturn(Optional.of(c1));
         Mockito.when(courseRespository.save(any(Course.class)))
