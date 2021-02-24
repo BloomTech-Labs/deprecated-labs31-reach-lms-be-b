@@ -75,7 +75,7 @@ public class ModuleServiceImpl implements ModuleService{
         //I will give ability now, but that may be subject to change.
         if (partiallyEditedModule.getCourse() != null)
         {
-            Course newCourse = courseService.fetchCourseById(partiallyEditedModule.getModuleId());
+            Course newCourse = courseService.fetchCourseById(partiallyEditedModule.getCourse().getCourseid());
             newModule.setCourse(newCourse);
         }
 
