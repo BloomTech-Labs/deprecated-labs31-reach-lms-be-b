@@ -1,11 +1,12 @@
 package com.lambdaschool.oktafoundation.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lambdaschool.oktafoundation.OktaFoundationApplicationTest;
 import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.models.Module;
 import com.lambdaschool.oktafoundation.repository.UserRepository;
-import com.lambdaschool.oktafoundation.services.ProgramService;
+import com.lambdaschool.oktafoundation.services.ModuleService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.After;
 import org.junit.Before;
@@ -26,7 +27,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     properties = {"command.line.runner.enabled=false"})
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin", roles = {"ADMIN"})
-public class ProgramControllerUnitTestNoDB {
+public class ModuleControllerUnitTestNoDB {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -50,18 +51,18 @@ public class ProgramControllerUnitTestNoDB {
     private MockMvc mockMvc;
 
     @MockBean
-    private ProgramService programService;
+    private ModuleService moduleService;
 
     @MockBean
     private UserRepository userrepos;
 
-    private List<Program> programList;
+    private List<Module> moduleList;
 
     private User u1;
 
     @Before
     public void setUp() throws Exception {
-        programList = new ArrayList<>();
+        moduleList = new ArrayList<>();
 
         Role r1 = new Role("admin");
         r1.setRoleid(1);
@@ -91,7 +92,7 @@ public class ProgramControllerUnitTestNoDB {
         p1.setProgramDescription("Intro to React");
         p1.getCourses().add(c1);
 
-       Module m2 = new Module();
+        Module m2 = new Module();
         m2.setModuleId(1);
         m2.setModuleName("Controllers");
         m2.setModuleDescription("Learn about making controllers");
@@ -105,23 +106,15 @@ public class ProgramControllerUnitTestNoDB {
         c2.getModules().add(m2);
 
         Program p2 = new Program();
-        p2.setProgramId(2);
+        p2.setProgramId(1);
         p2.setAdmin(u1);
         p2.setProgramName("Spring Boot");
         p2.setProgramType("Java");
         p2.setProgramDescription("Intro to Spring Boot");
         p2.getCourses().add(c2);
 
-        Program p3 = new Program();
-        p3.setProgramId(3);
-        p3.setAdmin(u1);
-        p3.setProgramName("Python");
-        p3.setProgramType("Py");
-        p3.setProgramDescription("Intro to Python");
-
-        programList.add(p1);
-        programList.add(p2);
-        programList.add(p3);
+        moduleList.add(m1);
+        moduleList.add(m2);
 
         p1.getTeachers().add(new UserTeachers(u1, p1));
         p1.getStudents().add(new UserStudents(u1, p1));
@@ -138,41 +131,14 @@ public class ProgramControllerUnitTestNoDB {
     }
 
     @Test
-    public void listAllPrograms() throws Exception {
-        String apiUrl = "/programs/programs";
+    public void fetchSingleModule() throws Exception {
+        String apiUrl = "/modules/module/{moduleId}";
 
         Mockito.when(userrepos.findByUsername(u1.getUsername()))
                 .thenReturn(u1);
 
-        Mockito.when(programService.findAll())
-                .thenReturn(programList);
-
-        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl)
-                .accept(MediaType.APPLICATION_JSON);
-
-        MvcResult r = mockMvc.perform(rb)
-                .andReturn();
-        String tr = r.getResponse()
-                .getContentAsString();
-
-        ObjectMapper mapper = new ObjectMapper();
-        String er = mapper.writeValueAsString(programList);
-
-        System.out.println("Expect: " + er);
-        System.out.println("Actual: " + tr);
-
-        assertEquals(er, tr);
-    }
-
-    @Test
-    public void getProgramById() throws Exception {
-        String apiUrl = "/programs/program/{programId}";
-
-        Mockito.when(userrepos.findByUsername(u1.getUsername()))
-                .thenReturn(u1);
-
-        Mockito.when(programService.findProgramById(1L))
-                .thenReturn(programList.get(0));
+        Mockito.when(moduleService.fetchModuleById(1L))
+                .thenReturn(moduleList.get(0));
 
         RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl, 1L)
                 .accept(MediaType.APPLICATION_JSON);
@@ -183,7 +149,7 @@ public class ProgramControllerUnitTestNoDB {
                 .getContentAsString();
 
         ObjectMapper mapper = new ObjectMapper();
-        String er = mapper.writeValueAsString(programList.get(0));
+        String er = mapper.writeValueAsString(moduleList.get(0));
 
         System.out.println("Expect: " + er);
         System.out.println("Actual: " + tr);
@@ -192,16 +158,16 @@ public class ProgramControllerUnitTestNoDB {
     }
 
     @Test
-    public void getProgramByIdNotFound() throws Exception {
-        String apiUrl = "/programs/program/{programId}";
+    public void fetchSingleModuleNotFound() throws Exception {
+        String apiUrl = "/modules/module/{moduleId}";
 
         Mockito.when(userrepos.findByUsername(u1.getUsername()))
                 .thenReturn(u1);
 
-        Mockito.when(programService.findProgramById(77L))
+        Mockito.when(moduleService.fetchModuleById(77L))
                 .thenReturn(null);
 
-        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl, 77)
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl, 77L)
                 .accept(MediaType.APPLICATION_JSON);
 
         MvcResult r = mockMvc.perform(rb)
@@ -218,16 +184,16 @@ public class ProgramControllerUnitTestNoDB {
     }
 
     @Test
-    public void getProgramByName() throws Exception {
-        String apiUrl = "/programs/program/name/{programName}";
+    public void fetchingAllModules() throws Exception {
+        String apiUrl = "/modules/modules";
 
         Mockito.when(userrepos.findByUsername(u1.getUsername()))
                 .thenReturn(u1);
 
-        Mockito.when(programService.findByName("React"))
-                .thenReturn(programList.get(0));
+        Mockito.when(moduleService.fetchAllModules())
+                .thenReturn(moduleList);
 
-        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl, "React")
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl)
                 .accept(MediaType.APPLICATION_JSON);
 
         MvcResult r = mockMvc.perform(rb)
@@ -236,7 +202,7 @@ public class ProgramControllerUnitTestNoDB {
                 .getContentAsString();
 
         ObjectMapper mapper = new ObjectMapper();
-        String er = mapper.writeValueAsString(programList.get(0));
+        String er = mapper.writeValueAsString(moduleList);
 
         System.out.println("Expect: " + er);
         System.out.println("Actual: " + tr);
@@ -245,17 +211,17 @@ public class ProgramControllerUnitTestNoDB {
     }
 
     @Test
-    public void addNewProgram() throws Exception {
-        String apiUrl = "/programs/program";
+    public void postModule() throws Exception {
+        String apiUrl = "/modules/module";
 
         Mockito.when(userrepos.findByUsername(u1.getUsername()))
                 .thenReturn(u1);
 
-        Mockito.when(programService.save(any(Program.class)))
-                .thenReturn(programList.get(0));
+        Mockito.when(moduleService.save(any(Module.class)))
+                .thenReturn(moduleList.get(0));
 
         ObjectMapper mapper = new ObjectMapper();
-        String er = mapper.writeValueAsString(programList.get(2));
+        String er = mapper.writeValueAsString(moduleList.get(1));
         RequestBuilder rb = MockMvcRequestBuilders.post(apiUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -264,21 +230,20 @@ public class ProgramControllerUnitTestNoDB {
         mockMvc.perform(rb)
                 .andExpect(status().is2xxSuccessful())
                 .andDo(MockMvcResultHandlers.print());
-
     }
 
     @Test
-    public void updateFullProgram() throws Exception {
-        String apiUrl = "/programs/program/{programId}";
+    public void putModule() throws Exception {
+        String apiUrl = "/modules/module/{moduleId}";
 
         Mockito.when(userrepos.findByUsername(u1.getUsername()))
                 .thenReturn(u1);
 
-        Mockito.when(programService.save(any(Program.class)))
-                .thenReturn(programList.get(0));
+        Mockito.when(moduleService.save(any(Module.class)))
+                .thenReturn(moduleList.get(0));
 
         ObjectMapper mapper = new ObjectMapper();
-        String er = mapper.writeValueAsString(programList.get(2));
+        String er = mapper.writeValueAsString(moduleList.get(1));
 
         RequestBuilder rb = MockMvcRequestBuilders.put(apiUrl, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -291,17 +256,17 @@ public class ProgramControllerUnitTestNoDB {
     }
 
     @Test
-    public void updateProgram() throws Exception {
-        String apiUrl = "/programs/program/{programId}";
+    public void patchCourse() throws Exception {
+        String apiUrl = "/modules/module/{moduleId}";
 
         Mockito.when(userrepos.findByUsername(u1.getUsername()))
                 .thenReturn(u1);
 
-        Mockito.when(programService.update(any(Program.class), any(Long.class)))
-                .thenReturn(programList.get(0));
+        Mockito.when(moduleService.edit(any(Module.class)))
+                .thenReturn(moduleList.get(0));
 
         ObjectMapper mapper = new ObjectMapper();
-        String er = mapper.writeValueAsString(programList.get(2));
+        String er = mapper.writeValueAsString(moduleList.get(1));
 
         RequestBuilder rb = MockMvcRequestBuilders.patch(apiUrl, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -314,8 +279,8 @@ public class ProgramControllerUnitTestNoDB {
     }
 
     @Test
-    public void deleteProgramById() throws Exception {
-        String apiUrl = "/programs/program/{programId}";
+    public void deleteSingleModule() throws Exception {
+        String apiUrl = "/modules/module/{moduleId}";
         RequestBuilder rb = MockMvcRequestBuilders.delete(apiUrl, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -324,99 +289,5 @@ public class ProgramControllerUnitTestNoDB {
         mockMvc.perform(rb)
                 .andExpect(status().is2xxSuccessful())
                 .andDo(MockMvcResultHandlers.print());
-    }
-
-    @Test
-    public void getProgramCourses() throws Exception {
-        String apiUrl = "/programs/program/{programId}/courses";
-
-        Mockito.when(userrepos.findByUsername(u1.getUsername()))
-                .thenReturn(u1);
-
-        Mockito.when(programService.findProgramById(1L))
-                .thenReturn(programList.get(0));
-
-        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl, 1L)
-                .accept(MediaType.APPLICATION_JSON);
-
-        MvcResult r = mockMvc.perform(rb)
-                .andReturn();
-
-        String tr = r.getResponse()
-                .getContentAsString();
-
-        ObjectMapper mapper = new ObjectMapper();
-        String er = mapper.writeValueAsString(programList.get(0).getCourses());
-
-        System.out.println("Expect: " + er);
-        System.out.println("Actual: " + tr);
-
-        assertEquals(er, tr);
-    }
-
-    @Test
-    public void getProgramTeachers() throws Exception {
-        String apiUrl = "/programs/program/{programId}/teachers";
-
-        Mockito.when(userrepos.findByUsername(u1.getUsername()))
-                .thenReturn(u1);
-
-        Mockito.when(programService.findProgramById(1L))
-                .thenReturn(programList.get(0));
-
-        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl, 1L)
-                .accept(MediaType.APPLICATION_JSON);
-
-        MvcResult r = mockMvc.perform(rb)
-                .andReturn();
-
-        String tr = r.getResponse()
-                .getContentAsString();
-
-        ObjectMapper mapper = new ObjectMapper();
-        List<User> lp = new ArrayList<>();
-        for (UserTeachers ut : programList.get(0).getTeachers())
-        {
-            lp.add(ut.getTeacher());
-        }
-        String er = mapper.writeValueAsString(lp);
-
-        System.out.println("Expect: " + er);
-        System.out.println("Actual: " + tr);
-
-        assertEquals(er, tr);
-    }
-
-    @Test
-    public void getProgramStudents() throws Exception {
-        String apiUrl = "/programs/program/{programId}/students";
-
-        Mockito.when(userrepos.findByUsername(u1.getUsername()))
-                .thenReturn(u1);
-
-        Mockito.when(programService.findProgramById(1L))
-                .thenReturn(programList.get(0));
-
-        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl, 1L)
-                .accept(MediaType.APPLICATION_JSON);
-
-        MvcResult r = mockMvc.perform(rb)
-                .andReturn();
-
-        String tr = r.getResponse()
-                .getContentAsString();
-
-        ObjectMapper mapper = new ObjectMapper();
-        List<User> lp = new ArrayList<>();
-        for (UserStudents us : programList.get(0).getStudents())
-        {
-            lp.add(us.getUser());
-        }
-        String er = mapper.writeValueAsString(lp);
-
-        System.out.println("Expect: " + er);
-        System.out.println("Actual: " + tr);
-
-        assertEquals(er, tr);
     }
 }
