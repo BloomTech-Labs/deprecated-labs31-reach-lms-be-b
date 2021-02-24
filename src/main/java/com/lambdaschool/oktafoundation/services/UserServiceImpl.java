@@ -68,8 +68,14 @@ public class UserServiceImpl
     @Override
     public void delete(long id)
     {
-        userrepos.findById(id)
+        // See if the user with the supplied id currently exist, if not throw an error.
+        User currentUser = userrepos.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("User id " + id + " not found!"));
+        // Check to see if the person sending the request to update this user is allowed to make the change, throw an error if not.
+        if(!helperFunctions.isAuthorizedToMakeChange(currentUser.getUsername()) && !helperFunctions.isTeacherEditingStudent(currentUser))
+        {
+            throw new ResourceNotFoundException("This user is not authorized to make change");
+        }
         userrepos.deleteById(id);
     }
 
