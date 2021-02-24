@@ -1,8 +1,12 @@
 package com.lambdaschool.oktafoundation.services;
 
 import com.lambdaschool.oktafoundation.exceptions.ResourceNotFoundException;
+import com.lambdaschool.oktafoundation.models.Role;
+import com.lambdaschool.oktafoundation.models.User;
+import com.lambdaschool.oktafoundation.models.UserRoles;
 import com.lambdaschool.oktafoundation.models.ValidationError;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +22,12 @@ import java.util.List;
 public class HelperFunctionsImpl
     implements HelperFunctions
 {
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
+
     public List<ValidationError> getConstraintViolation(Throwable cause)
     {
         // Find any data violations that might be associated with the error and report them
@@ -87,7 +97,22 @@ public class HelperFunctionsImpl
         } else
         {
             // stop user is not authorized to make this change so stop the whole process and throw an exception
-            throw new ResourceNotFoundException(authentication.getName() + " not authorized to make change");
+//            throw new ResourceNotFoundException(authentication.getName() + " not authorized to make change");
+            return false;
         }
+    }
+
+    @Override
+    public boolean isTeacherEditingStudent(User user) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Role student = roleService.findByName("student");
+        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_TEACHER")) &&
+                user.getRoles().contains(new UserRoles(user,student))){
+            return true;
+        } else
+        {
+            return false;
+        }
+
     }
 }

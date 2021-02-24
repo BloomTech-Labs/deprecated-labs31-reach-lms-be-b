@@ -138,7 +138,7 @@ public class UserServiceImpl
 
         // update own thing
         // admin update
-        if (helperFunctions.isAuthorizedToMakeChange(currentUser.getUsername()))
+        if (helperFunctions.isAuthorizedToMakeChange(currentUser.getUsername()) || helperFunctions.isTeacherEditingStudent(user))
         {
             if (user.getUsername() != null)
             {

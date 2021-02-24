@@ -40,16 +40,18 @@ public class OktaAuthSecurityConfig
 						"/webjars/**"
 				)
 				.permitAll()
+
 				.antMatchers("/programs/**")
 				.hasAnyRole("ADMIN")
+
 				.antMatchers(HttpMethod.POST, "/users/**")
-				.hasAnyRole("ADMIN")
+				.hasAnyRole("ADMIN", "TEACHER")
 				.antMatchers(HttpMethod.DELETE, "/users/**")
-				.hasAnyRole("ADMIN")
+				.hasAnyRole("ADMIN", "TEACHER")
 				.antMatchers(HttpMethod.PUT, "/users/**")
-				.hasAnyRole("ADMIN")
-				.antMatchers("/programs/**")
-				.hasAnyRole("ADMIN")
+				.hasAnyRole("ADMIN", "TEACHER")
+				.antMatchers(HttpMethod.POST, "/users/**")
+				.hasAnyRole("ADMIN", "TEACHER")
 
 				// Start of courses
 				.antMatchers(HttpMethod.POST, "/courses/**")
