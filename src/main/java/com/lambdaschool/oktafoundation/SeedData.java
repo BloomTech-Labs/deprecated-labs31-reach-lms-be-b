@@ -84,12 +84,12 @@ public class SeedData
 		u1 = userService.save(u1);
 
 
-		User u2 = new User("barnbarn@maildrop.cc", "Barn", "Barn", "16155554321");
+		User u2 = new User("llama002@maildrop.cc", "Barn", "Barn", "16155554321");
 		u2.getRoles()
 				.add(new UserRoles(u2, r2));
 		u2 = userService.save(u2);
 
-		User u3 = new User("student@reachlms.cc", "Reach", "Student", "17774443214");
+		User u3 = new User("llama003@maildrop.cc", "Reach", "Student", "17774443214");
 		u3.getRoles()
 				.add(new UserRoles(u3, r3));
 		u3 = userService.save(u3);

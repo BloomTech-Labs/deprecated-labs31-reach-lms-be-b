@@ -68,8 +68,14 @@ public class UserServiceImpl
     @Override
     public void delete(long id)
     {
-        userrepos.findById(id)
+        // See if the user with the supplied id currently exist, if not throw an error.
+        User currentUser = userrepos.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("User id " + id + " not found!"));
+        // Check to see if the person sending the request to update this user is allowed to make the change, throw an error if not.
+        if(!helperFunctions.isAuthorizedToMakeChange(currentUser.getUsername()) && !helperFunctions.isTeacherEditingStudent(currentUser))
+        {
+            throw new ResourceNotFoundException("This user is not authorized to make change");
+        }
         userrepos.deleteById(id);
     }
 
@@ -93,8 +99,14 @@ public class UserServiceImpl
 
         if (user.getUserid() != 0)
         {
-            userrepos.findById(user.getUserid())
+            // See if the user with the supplied id currently exist, if not throw an error.
+            User currentUser = userrepos.findById(user.getUserid())
                 .orElseThrow(() -> new ResourceNotFoundException("User id " + user.getUserid() + " not found!"));
+            // Check to see if the person sending the request to update this user is allowed to make the change, throw an error if not.
+            if(!helperFunctions.isAuthorizedToMakeChange(user.getUsername()) && !helperFunctions.isTeacherEditingStudent(currentUser))
+            {
+                throw new ResourceNotFoundException("This user is not authorized to make change");
+            }
             newUser.setUserid(user.getUserid());
         }
 
@@ -138,7 +150,7 @@ public class UserServiceImpl
 
         // update own thing
         // admin update
-        if (helperFunctions.isAuthorizedToMakeChange(currentUser.getUsername()))
+        if (helperFunctions.isAuthorizedToMakeChange(currentUser.getUsername()) || helperFunctions.isTeacherEditingStudent(user))
         {
             if (user.getUsername() != null)
             {
