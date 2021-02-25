@@ -1,12 +1,10 @@
 package com.lambdaschool.oktafoundation.controllers;
 
-import com.lambdaschool.oktafoundation.models.Program;
-import com.lambdaschool.oktafoundation.models.User;
-import com.lambdaschool.oktafoundation.models.UserStudents;
-import com.lambdaschool.oktafoundation.models.UserTeachers;
-import com.lambdaschool.oktafoundation.services.HelperFunctions;
+import com.lambdaschool.oktafoundation.models.*;
 import com.lambdaschool.oktafoundation.services.ProgramService;
 import com.lambdaschool.oktafoundation.services.UserService;
+import com.lambdaschool.oktafoundation.services.UserStudentsService;
+import com.lambdaschool.oktafoundation.services.UserTeachersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,7 +29,10 @@ public class ProgramController {
     private UserService userService;
 
     @Autowired
-    private HelperFunctions helperFunctions;
+    private UserTeachersService userTeachersService;
+
+    @Autowired
+    private UserStudentsService userStudentsService;
 
     @GetMapping(value = "/programs", produces = "application/json")
     public ResponseEntity<?> listAllPrograms()
@@ -40,9 +41,9 @@ public class ProgramController {
         return new ResponseEntity<>(programs, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/program/{programId}", produces = "application/json")
-    public ResponseEntity<?> getProgramById(@PathVariable long programId){
-        Program p = programServices.findProgramById(programId);
+    @GetMapping(value = "/program/{programid}", produces = "application/json")
+    public ResponseEntity<?> getProgramById(@PathVariable long programid){
+        Program p = programServices.findProgramById(programid);
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
@@ -52,15 +53,15 @@ public class ProgramController {
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/program/{programId}/courses", produces = "application/json")
-    public ResponseEntity<?> getProgramCourses (@PathVariable long programId){
-        Program p = programServices.findProgramById(programId);
+    @GetMapping(value = "/program/{programid}/courses", produces = "application/json")
+    public ResponseEntity<?> getProgramCourses (@PathVariable long programid){
+        Program p = programServices.findProgramById(programid);
         return new ResponseEntity<>(p.getCourses(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/program/{programId}/teachers", produces = "application/json")
-    public ResponseEntity<?> getProgramTeachers (@PathVariable long programId){
-        Program p = programServices.findProgramById(programId);
+    @GetMapping(value = "/program/{programid}/teachers", produces = "application/json")
+    public ResponseEntity<?> getProgramTeachers (@PathVariable long programid){
+        Program p = programServices.findProgramById(programid);
         List<User> teachers = new ArrayList<>();
         for(UserTeachers ut : p.getTeachers())
         {
@@ -69,9 +70,9 @@ public class ProgramController {
         return new ResponseEntity<>(teachers, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/program/{programId}/students", produces = "application/json")
-    public ResponseEntity<?> getProgramStudents (@PathVariable long programId){
-        Program p = programServices.findProgramById(programId);
+    @GetMapping(value = "/program/{programid}/students", produces = "application/json")
+    public ResponseEntity<?> getProgramStudents (@PathVariable long programid){
+        Program p = programServices.findProgramById(programid);
         List<User> students = new ArrayList<>();
         for(UserStudents us : p.getStudents())
         {
@@ -107,6 +108,18 @@ public class ProgramController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PutMapping(value = "/program/{programid}/teachers/{userid}")
+    public ResponseEntity<?> addTeacherToProgram(@PathVariable long programid, @PathVariable long userid) {
+        userTeachersService.save(userid, programid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/program/{programid}/students/{userid}")
+    public ResponseEntity<?> addStudentToProgram(@PathVariable long programid, @PathVariable long userid) {
+        userStudentsService.save(userid, programid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PatchMapping(value = "program/{programid}", consumes = "application/json")
     public ResponseEntity<?> updateProgram(@RequestBody Program updateProgram, @PathVariable long programid) throws Exception
     {
@@ -117,6 +130,20 @@ public class ProgramController {
     @DeleteMapping(value = "program/{programid}")
     public ResponseEntity<?> deleteProgramById(@PathVariable long programid){
         programServices.delete(programid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/program/{programid}/teachers/{userid}")
+    public ResponseEntity<?> deleteTeacherFromProgram(@PathVariable long programid, @PathVariable long userid)
+    {
+        userTeachersService.deleteById(new UserTeachersId(userid, programid));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/program/{programid}/students/{userid}")
+    public ResponseEntity<?> deleteStudentFromProgram(@PathVariable long programid, @PathVariable long userid)
+    {
+        userStudentsService.deleteById(new UserStudentsId(userid, programid));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

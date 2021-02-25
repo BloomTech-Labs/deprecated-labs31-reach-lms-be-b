@@ -29,4 +29,9 @@ public class UserStudentsServiceImpl implements UserStudentsService
 
         return userStudentsRepository.save(userStudents);
     }
+
+    @Override
+    public void deleteById(UserStudentsId id) {
+        userStudentsRepository.deleteById(id);
+    }
 }

@@ -113,4 +113,18 @@ public class Program extends Auditable{
     public void setTeachers(Set<UserTeachers> teachers) {
         this.teachers = teachers;
     }
+
+    @Override
+    public String toString() {
+        return "Program{" +
+                "programId=" + programId +
+                ", programName='" + programName + '\'' +
+                ", programType='" + programType + '\'' +
+                ", programDescription='" + programDescription + '\'' +
+                ", courses=" + courses +
+                ", students=" + students +
+                ", teachers=" + teachers +
+                ", admin=" + admin +
+                '}';
+    }
 }
