@@ -78,23 +78,49 @@ public class SeedData
 		r2 = roleService.save(r2);
 		r3 = roleService.save(r3);
 
+		// Admin User
 		User u1 = new User("llama001@maildrop.cc", "Llama", "Admin", "18005551234");
 		u1.getRoles()
 				.add(new UserRoles(u1, r1));
 		u1 = userService.save(u1);
 
-
+		// Teachers
 		User u2 = new User("llama002@maildrop.cc", "Barn", "Barn", "16155554321");
 		u2.getRoles()
 				.add(new UserRoles(u2, r2));
 		u2 = userService.save(u2);
 
+		User u4 = new User("llama004@maildrop.cc", "Test 1", "Teacher", "16155554321");
+		u4.getRoles()
+				.add(new UserRoles(u4, r2));
+		u4 = userService.save(u4);
+
+		User u5 = new User("llama005@maildrop.cc", "Test 2", "Teacher", "16155554321");
+		u5.getRoles()
+				.add(new UserRoles(u5, r2));
+		u5 = userService.save(u5);
+
+		// Students
 		User u3 = new User("llama003@maildrop.cc", "Reach", "Student", "17774443214");
 		u3.getRoles()
 				.add(new UserRoles(u3, r3));
 		u3 = userService.save(u3);
 
-		// The following is an example user!
+		User u6 = new User("llama006@maildrop.cc", "Test 2", "Student", "17774443214");
+		u6.getRoles()
+				.add(new UserRoles(u6, r3));
+		u6 = userService.save(u6);
+
+		User u7 = new User("llama007@maildrop.cc", "Test 3", "Student", "17774443214");
+		u7.getRoles()
+				.add(new UserRoles(u7, r3));
+		u7 = userService.save(u7);
+
+		User u8 = new User("llama008@maildrop.cc", "Test 4", "Student", "17774443214");
+		u8.getRoles()
+				.add(new UserRoles(u8, r3));
+		u8 = userService.save(u8);
+
 
 		Program p1 = new Program();
 		p1.setProgramName("Python Basics");

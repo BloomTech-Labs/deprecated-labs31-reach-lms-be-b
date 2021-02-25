@@ -29,4 +29,10 @@ public class UserTeachersServiceImpl implements UserTeachersService
 
         return userTeachersRepository.save(userTeachers);
     }
+
+    @Override
+    public void deleteById(UserTeachersId id) {
+        userTeachersRepository.deleteById(id);
+
+    }
 }
