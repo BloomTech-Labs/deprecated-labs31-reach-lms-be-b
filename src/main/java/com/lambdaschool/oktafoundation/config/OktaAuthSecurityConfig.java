@@ -41,8 +41,16 @@ public class OktaAuthSecurityConfig
 				)
 				.permitAll()
 				// Start of Programs
-				.antMatchers("/programs/**")
+				.antMatchers(HttpMethod.POST, "/programs/**")
 				.hasAnyRole("ADMIN")
+				.antMatchers(HttpMethod.PUT, "/programs/**")
+				.hasAnyRole("ADMIN")
+				.antMatchers(HttpMethod.PATCH, "/programs/**")
+				.hasAnyRole("ADMIN")
+				.antMatchers(HttpMethod.DELETE, "/programs/**")
+				.hasAnyRole("ADMIN")
+				.antMatchers(HttpMethod.GET, "/programs/**")
+				.hasAnyRole("ADMIN", "TEACHER", "STUDENT")
 
 				//Start of Users
 				.antMatchers(HttpMethod.POST, "/users/**")
@@ -64,7 +72,7 @@ public class OktaAuthSecurityConfig
 				.antMatchers(HttpMethod.PATCH, "/courses/**")
 				.hasAnyRole("ADMIN", "TEACHER")
 				.antMatchers(HttpMethod.GET, "/courses/**")
-				.hasAnyRole("ADMIN", "USER", "DATA")
+				.hasAnyRole("ADMIN", "TEACHER", "STUDENT")
 
 				// Start of modules
 				.antMatchers(HttpMethod.POST, "/modules/**")

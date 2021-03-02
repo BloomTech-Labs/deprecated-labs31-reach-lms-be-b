@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -17,7 +16,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+
 
 /**
  * The entry point for clients to access user data
@@ -229,6 +228,15 @@ public class UserController
         return new ResponseEntity<>(u,
             HttpStatus.OK);
     }
+
+    /**
+     * Returns the User programs for the currently authenticated user based off of the supplied access token
+     * <br>Example: <a href="http://localhost:2019/users/getuserprograms">http://localhost:2019/users/getuserprograms</a>
+     *
+     * @param authentication The authenticated user object provided by Spring Security
+     * @return JSON of the current user's programs. Status of OK
+     * @see UserService#findByName(String) UserService.findByName(authenticated user)
+     */
 
     @GetMapping(value = "/getuserprograms", produces = "application/json")
     public ResponseEntity<?> getCurrentUserPrograms(Authentication authentication)
