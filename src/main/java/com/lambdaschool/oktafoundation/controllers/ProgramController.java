@@ -194,7 +194,7 @@ public class ProgramController {
      * @param programid     The primary key of the program you wish to add a teacher to
      * @param userid        The primary key of the user you wish to add as a teacher
      * @return status of OK
-     * @see UserTeachersService#save(Long, Long) UserTeachersService.save(Long, Long)
+     * @see UserTeachersService#save(long, long) UserTeachersService.save(Long, Long)
      */
 
     @PutMapping(value = "/program/{programid}/teachers/{userid}")
@@ -212,7 +212,7 @@ public class ProgramController {
      * @param programid     The primary key of the program you wish to add a student to
      * @param userid        The primary key of the user you wish to add as a student
      * @return status of OK
-     * @see UserTeachersService#save(Long, Long) UserTeachersService.save(Long, Long)
+     * @see UserTeachersService#save(long, long) UserTeachersService.save(Long, Long)
      */
 
     @PutMapping(value = "/program/{programid}/students/{userid}")
@@ -221,6 +221,17 @@ public class ProgramController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * Updates the program record associated with the given id with the provided data. Only the provided fields are affected.
+     * If an course list is given, it replaces the original course list.
+     * <br> Example: <a href="http://localhost:2019/programs/program/7">http://localhost:2019/programs/program/7</a>
+     *
+     * @param updateProgram An object containing values for just the fields that are being updated. All other fields are left NULL.
+     * @param programid     The primary key of the program you wish to update.
+     * @return A status of OK
+     * @see ProgramService#update(Program, long) ProgramService.update(Program, long)
+     */
+
     @PatchMapping(value = "program/{programid}", consumes = "application/json")
     public ResponseEntity<?> updateProgram(@RequestBody Program updateProgram, @PathVariable long programid) throws Exception
     {
@@ -228,11 +239,28 @@ public class ProgramController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * Deletes a given program along with associated courses and modules
+     * <br>Example: <a href="http://localhost:2019/programs/program/14">http://localhost:2019/programs/program/14</a>
+     *
+     * @param programid the primary key of the program you wish to delete
+     * @return Status of OK
+     */
+
     @DeleteMapping(value = "program/{programid}")
     public ResponseEntity<?> deleteProgramById(@PathVariable long programid){
         programServices.delete(programid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * Deletes a given teacher from the set of teachers for a given program
+     * <br>Example: <a href="http://localhost:2019/programs/program/14/teachers/2">http://localhost:2019/programs/program/14/teacher/2</a>
+     *
+     * @param programid the primary key of the program you wish to remove a teacher from
+     * @param userid the primary key of the teacher you wish to remove
+     * @return Status of OK
+     */
 
     @DeleteMapping(value = "/program/{programid}/teachers/{userid}")
     public ResponseEntity<?> deleteTeacherFromProgram(@PathVariable long programid, @PathVariable long userid)
@@ -240,6 +268,15 @@ public class ProgramController {
         userTeachersService.deleteById(new UserTeachersId(userid, programid));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * Deletes a given student from the set of students for a given program
+     * <br>Example: <a href="http://localhost:2019/programs/program/14/students/2">http://localhost:2019/programs/program/14/students/2</a>
+     *
+     * @param programid the primary key of the program you wish to remove a student from
+     * @param userid the primary key of the student you wish to remove
+     * @return Status of OK
+     */
 
     @DeleteMapping(value = "/program/{programid}/students/{userid}")
     public ResponseEntity<?> deleteStudentFromProgram(@PathVariable long programid, @PathVariable long userid)
