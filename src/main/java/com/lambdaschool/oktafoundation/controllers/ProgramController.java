@@ -15,10 +15,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * The entry point for clients to access program data
+ */
 @RestController
 @RequestMapping("/programs")
 public class ProgramController {
@@ -34,6 +37,13 @@ public class ProgramController {
     @Autowired
     private UserStudentsService userStudentsService;
 
+    /**
+     * Returns a list of all programs
+     * <br>Example: <a href="http://localhost:2019/programs/programs">http://localhost:2019/programs/programs</a>
+     *
+     * @return JSON list of all programs with a status of OK
+     * @see ProgramService#findAll() ProgramService.findAll()
+     */
     @GetMapping(value = "/programs", produces = "application/json")
     public ResponseEntity<?> listAllPrograms()
     {
@@ -41,11 +51,29 @@ public class ProgramController {
         return new ResponseEntity<>(programs, HttpStatus.OK);
     }
 
+    /**
+     * Returns a single program based off a program id number
+     * <br>Example: http://localhost:2019/programs/program/1
+     *
+     * @param programid The primary key of the program you seek
+     * @return JSON object of the program you seek
+     * @see ProgramService#findProgramById(long)  ProgramService.findProgramById(long)
+     */
+
     @GetMapping(value = "/program/{programid}", produces = "application/json")
     public ResponseEntity<?> getProgramById(@PathVariable long programid){
         Program p = programServices.findProgramById(programid);
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
+
+    /**
+     * Returns a single program based on a given program name
+     * <br>Example: <a href="http://localhost:2019/programs/program/name/React">http://localhost:2019/programs/program/name/React</a>
+     *
+     * @param programName The name of the program (String) you seek
+     * @return JSON object of the program you seek
+     * @see ProgramService#findByName(String)   ProgramService.findByName(String)
+     */
 
     @GetMapping(value = "/program/name/{programName}", produces = "application/json")
     public ResponseEntity<?> getProgramByName(@PathVariable String programName){
@@ -53,11 +81,29 @@ public class ProgramController {
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
+    /**
+     * Returns a list of Courses based on a programid
+     * <br>Example: <a href="http://localhost:2019/programs/program/1/courses">http://localhost:2019/programs/program/1/courses</a>
+     *
+     * @param programid The name of the program (long) you seek
+     * @return JSON list of courses
+     * @see ProgramService#findProgramById(long)    ProgramService.findProgramById(long)
+     */
+
     @GetMapping(value = "/program/{programid}/courses", produces = "application/json")
     public ResponseEntity<?> getProgramCourses (@PathVariable long programid){
         Program p = programServices.findProgramById(programid);
         return new ResponseEntity<>(p.getCourses(), HttpStatus.OK);
     }
+
+    /**
+     * Returns a list of teachers based on a programid
+     * <br>Example: <a href="http://localhost:2019/programs/program/1/teachers">http://localhost:2019/programs/program/1/teachers</a>
+     *
+     * @param programid The name of the program (long) you seek
+     * @return JSON list of users
+     * @see ProgramService#findProgramById(long)    ProgramService.findProgramById(long)
+     */
 
     @GetMapping(value = "/program/{programid}/teachers", produces = "application/json")
     public ResponseEntity<?> getProgramTeachers (@PathVariable long programid){
@@ -70,6 +116,15 @@ public class ProgramController {
         return new ResponseEntity<>(teachers, HttpStatus.OK);
     }
 
+    /**
+     * Returns a list of students based on a programid
+     * <br>Example: <a href="http://localhost:2019/programs/program/1/students">http://localhost:2019/programs/program/1/students</a>
+     *
+     * @param programid The name of the program (long) you seek
+     * @return JSON list of users
+     * @see ProgramService#findProgramById(long)    ProgramService.findProgramById(long)
+     */
+
     @GetMapping(value = "/program/{programid}/students", produces = "application/json")
     public ResponseEntity<?> getProgramStudents (@PathVariable long programid){
         Program p = programServices.findProgramById(programid);
@@ -80,6 +135,16 @@ public class ProgramController {
         }
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
+
+    /**
+     * Given a complete Program Object, create a new Program record and accompanying courses and modules
+     * <br> Example: <a href="http://localhost:2019/programs/program">http://localhost:2019/programs/program</a>
+     *
+     * @param newProgram A complete new Program
+     * @return A location header with the URI to the newly created program and a status of CREATED
+     * @throws URISyntaxException Exception if something does not work in creating the location header
+     * @see ProgramService#save(Program) ProgramService.save(Program)
+     */
 
     @PostMapping(value = "/program", consumes = "application/json")
     public ResponseEntity<?> addNewProgram(@Valid @RequestBody Program newProgram, Authentication authentication) throws Exception
@@ -98,6 +163,18 @@ public class ProgramController {
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
+    /**
+     * Given a complete Program Object
+     * Given the program id, primary key, is in the program table,
+     * replace the Program record.
+     * <br> Example: <a href="http://localhost:2019/programs/programs/1">http://localhost:2019/programs/program/1</a>
+     *
+     * @param updateProgram A complete Program
+     * @param programid     The primary key of the program you wish to replace.
+     * @return status of OK
+     * @see ProgramService#save(Program) ProgramService.save(Program)
+     */
+
     @PutMapping(value = "/program/{programid}", consumes = "application/json")
     public ResponseEntity<?> updateFullProgram(@Valid @RequestBody Program updateProgram,
                                                @PathVariable long programid, Authentication authentication) throws Exception
@@ -108,11 +185,35 @@ public class ProgramController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * Given the program id, primary key, is in the program table,
+     * and the user id, primary key, is in the User table, add the user to the set of teachers
+     * for the given program
+     * <br> Example: <a href="http://localhost:2019/programs/programs/1/teachers/1">http://localhost:2019/programs/program/1/teachers/1</a>
+     *
+     * @param programid     The primary key of the program you wish to add a teacher to
+     * @param userid        The primary key of the user you wish to add as a teacher
+     * @return status of OK
+     * @see UserTeachersService#save(Long, Long) UserTeachersService.save(Long, Long)
+     */
+
     @PutMapping(value = "/program/{programid}/teachers/{userid}")
     public ResponseEntity<?> addTeacherToProgram(@PathVariable long programid, @PathVariable long userid) {
         userTeachersService.save(userid, programid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * Given the program id, primary key, is in the program table,
+     * and the user id, primary key, is in the User table, add the user to the set of students
+     * for the given program
+     * <br> Example: <a href="http://localhost:2019/programs/programs/1/students/1">http://localhost:2019/programs/program/1/students/1</a>
+     *
+     * @param programid     The primary key of the program you wish to add a student to
+     * @param userid        The primary key of the user you wish to add as a student
+     * @return status of OK
+     * @see UserTeachersService#save(Long, Long) UserTeachersService.save(Long, Long)
+     */
 
     @PutMapping(value = "/program/{programid}/students/{userid}")
     public ResponseEntity<?> addStudentToProgram(@PathVariable long programid, @PathVariable long userid) {
