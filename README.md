@@ -41,11 +41,11 @@ Thus the new table layout is as follows
    * Many-To-Many - UserTeachers is a join table between User and Program. (filter users by role teacher)
    * Many-To-Many - UserStudents is a join table between User and Program. (filter users by role student)
 <br>
-* Program is the driving table.
+* Program is the driving table.<br>
 * Courses have a Many-To-One relationship to Program.
 <br>
-* Course is the driving table.
-* Modules have a Many-To-One relationship to Course.
+* Course is the driving table.<br>
+* Modules have a Many-To-One relationship to Course.<br>
 
 
 ![Image of Database Layout](reachlmsdbschema.png)
