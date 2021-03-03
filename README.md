@@ -36,7 +36,18 @@ Thus the new table layout is as follows
 * User is the driving table.
 * Useremails have a Many-To-One relationship with User. Each User has many user email combinations. Each user email combination has only one User.
 * Roles have a Many-To-Many relationship with Users.
-* 
+* Programs have three distinct relationships to User. 
+   * One-To-One - Authenticated user is assigned as Admin upon program initialization.
+   * Many-To-Many - UserTeachers is a join table between User and Program. (filter users by role teacher)
+   * Many-To-Many - UserStudents is a join table between User and Program. (filter users by role student)
+<br>
+* Program is the driving table.
+* Courses have a Many-To-One relationship to Program.
+<br>
+* Course is the driving table.
+* Modules have a Many-To-One relationship to Course.
+
+
 ![Image of Database Layout](reachlmsdbschema.png)
 
 Using the provided seed data, expand each endpoint below to see the output it generates.
