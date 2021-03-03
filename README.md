@@ -40,8 +40,10 @@ Thus the new table layout is as follows
    * One-To-One - Authenticated user is assigned as Admin upon program initialization.
    * Many-To-Many - UserTeachers is a join table between User and Program. (filter users by role teacher)
    * Many-To-Many - UserStudents is a join table between User and Program. (filter users by role student)
+   
 * Program is the driving table.
 * Courses have a Many-To-One relationship to Program.
+
 * Course is the driving table.
 * Modules have a Many-To-One relationship to Course.
 
