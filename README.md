@@ -53,13 +53,14 @@ Thus the new table layout is as follows
 ### Installation Instructions(for running locally)
 ##### With IntelliJ IDEA
 * Clone repository
-* Make sure to have env variables set
+* Make sure to have enviornment variables set correctly, including JAVA_HOME
 * Open in IDEA
 * Click run
 * Celebrate
 ##### Run in Terminal
 * Clone repository
 * cd into repository
-* (mac and linux) chmod +x nvmw
+* Make sure to have enviornment variables set correctly, including JAVA_HOME
+* Mac and Linux - chmod +x nvmw
 * ./nvmw spring-boot:run
-* (windows, make sure JAVA_HOME env variable set correctly) .\mvnw.cmd spring-boot:run
+* Windows - .\mvnw.cmd spring-boot:run
