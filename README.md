@@ -7,10 +7,8 @@ This is a database scheme with Users, Roles, UserRoles, UserEmails, Programs, Co
 # Reach Learning Management System
 
 You can find the frontend project deployed at: https://b.reachlms.dev/ <br>
-You can find the backend project deployed at: https://reach-team-b-be.herokuapp.com/ 
+You can find the backend project deployed at: https://reach-team-b-be.herokuapp.com/ <br>
 You can find the backend project documentation at: https://reach-team-b-be.herokuapp.com/swagger-ui.html
-
-### Contributers
 
 ## Contributors
 |                                          [Wayne Abbruscato](https://github.com/Callisto1981)                                                            |                                                       [Seth Bradshaw](https://github.com/seth-bradshaw)                                                    |                                                      [Sara Cearc](https://github.com/cearc-sara)                                                       |                                                       [Christopher Girvin](https://github.com/)                                               |                                                      [Matias Iturbide](https://github.com/JDMTias)                                                 |                                                      [Chaz Kiker](https://github.com/chazkiker2/)                                                     |                                         [Brendan Lai-Tong](https://github.com/kai-blt/)                                                             |                                         [Shane Slone](https://github.com/shaneslone)                                                                   |                            
