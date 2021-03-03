@@ -61,6 +61,12 @@ Thus the new table layout is as follows
 * Clone repository
 * cd into repository
 * Make sure to have enviornment variables set correctly, including JAVA_HOME
-* Mac and Linux - chmod +x nvmw
-* ./nvmw spring-boot:run
-* Windows - .\mvnw.cmd spring-boot:run
+* Mac and Linux 
+```
+chmod +x nvmw
+./nvmw spring-boot:run
+```
+* Windows  
+```
+.\mvnw.cmd spring-boot:run
+```
