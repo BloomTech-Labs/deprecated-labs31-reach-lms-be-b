@@ -8,7 +8,7 @@ This is a database scheme with Users, Roles, UserRoles, UserEmails, Programs, Co
 
 You can find the frontend project deployed at: https://b.reachlms.dev/ <br>
 You can find the backend project deployed at: https://reach-team-b-be.herokuapp.com/ <br>
-You can find the backend project documentation at: https://reach-team-b-be.herokuapp.com/swagger-ui.html
+You can find the backend endpoints documentation at: https://reach-team-b-be.herokuapp.com/swagger-ui.html
 
 ## Contributors
 |                                          [Wayne Abbruscato](https://github.com/Callisto1981)                                                            |                                                       [Seth Bradshaw](https://github.com/seth-bradshaw)                                                    |                                                      [Sara Cearc](https://github.com/cearc-sara)                                                       |                                                       [Christopher Girvin](https://github.com/)                                               |                                                      [Matias Iturbide](https://github.com/JDMTias)                                                 |                                                      [Chaz Kiker](https://github.com/chazkiker2/)                                                     |                                         [Brendan Lai-Tong](https://github.com/kai-blt/)                                                             |                                         [Shane Slone](https://github.com/shaneslone)                                                                   |                            
@@ -50,4 +50,16 @@ Thus the new table layout is as follows
 
 ![Image of Database Layout](reachlmsdbschema.png)
 
-
+### Installation Instructions(for running locally)
+##### With IntelliJ IDEA
+* Clone repository
+* Make sure to have env variables set
+* Open in IDEA
+* Click run
+* Celebrate
+##### Run in Terminal
+* Clone repository
+* cd into repository
+* (mac and linux) chmod +x nvmw
+* ./nvmw spring-boot:run
+* (windows, make sure JAVA_HOME env variable set correctly) .\mvnw.cmd spring-boot:run
